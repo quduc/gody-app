@@ -9,11 +9,8 @@ export const CustomBackground: FC<Props> = (props) => {
     const { style: styleOverride, children } = props;
     const styles = [{ paddingHorizontal: 20, flex: 1, backgroundColor: colors.background }, styleOverride];
     return (
-        <>
-            <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} bounces={false}>
-                <View style={styles}>{children}</View>
-            </KeyboardAwareScrollView>
-        </>
-
+        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} bounces={false}>
+            <View style={styles}>{children}</View>
+        </KeyboardAwareScrollView>
     );
 };
