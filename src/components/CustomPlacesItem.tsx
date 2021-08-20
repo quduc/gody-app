@@ -6,15 +6,14 @@ import { colors } from '../contants/colors';
 import { CustomText } from './CustomText';
 
 interface Props {
-    icon: any;
     text: string;
 }
 
-export const CustomTextFieldWithIcon: FC<Props> = (props) => {
+export const CustomPlacesItem: FC<Props> = (props) => {
     return (
         <View style={styles.container}>
             <FastImage
-                source={props.icon}
+                source={require('../resources/images/marker.png')}
                 style={{ width: 20, height: 20 }}
                 tintColor={colors.neutral3}
             />
@@ -22,14 +21,10 @@ export const CustomTextFieldWithIcon: FC<Props> = (props) => {
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        borderBottomColor: colors.neutral4,
-        borderBottomWidth: 1,
-        marginVertical: 10,
-        height: 64,
-        alignItems: 'center'
+        height: 48,
+        alignItems: 'center',
     }
 })
