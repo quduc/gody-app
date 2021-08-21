@@ -11,6 +11,7 @@ import constants from '../contants/contants';
 import { DrawerItemProps } from '../types';
 import { Search } from '../screens/search/Search';
 import { ChooseCar } from '../screens/choosecar/ChooseCar';
+import { GodyPass } from '../screens/godypass/GodyPass';
 import { ChoosePayment } from '../screens/choosepayment/ChoosePayment';
 import { AddPayment } from '../screens/addpayment/AddPayment';
 const Drawer = createDrawerNavigator();
@@ -38,7 +39,7 @@ const drawerItems: DrawerItemProps[] = [
     {
         "id": 3,
         "name": "GODY Pass",
-        "screen": "GODYPass",
+        "screen": "GodyPass",
         "icon": require('../resources/images/godypass.png')
     },
     {
@@ -158,6 +159,12 @@ export const RootStack: FC<Props> = () => {
                     component={AddPayment}
                     options={{
                         headerTitle: "Add payment",
+                    }} />
+                <Drawer.Screen
+                    name="GodyPass"
+                    component={GodyPass}
+                    options={{
+                        headerTitle: "GODY Pass",
                     }} />
             </Drawer.Navigator>
         </NavigationContainer>

@@ -75,7 +75,7 @@ export const ChooseCar: FC<Props> = (props) => {
                     source={carService.image}
                     resizeMode="cover"
                 />
-                <CustomText text={carService.name} t2 style={{ textAlign: 'center', fontSize: 15 }} />
+                <CustomText text={carService.name} t2 style={{ textAlign: 'center', fontSize: 14 }} />
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, justifyContent: 'center' }}>
                     <FastImage
                         style={{ width: 12, height: 12, marginRight: 5 }}

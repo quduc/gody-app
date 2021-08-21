@@ -1,8 +1,9 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import { View, ViewProps } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { colors } from '../contants/colors';
 interface Props extends ViewProps {
+    style?: any;
 
 };
 export const CustomBackground: FC<Props> = (props) => {

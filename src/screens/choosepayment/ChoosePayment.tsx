@@ -54,7 +54,7 @@ export const ChoosePayment: FC<Props> = (props) => {
             <CustomText text="Promotion codes" t2 style={{ color: colors.neutral2, marginTop: 20 }} />
             <AddPaymentMethod title="Add promotion codes" />
 
-            <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
+            <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10, marginBottom: 20 }}>
                 <CustomButton
                     type="primary"
                     title="User payment method"
