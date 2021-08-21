@@ -11,6 +11,8 @@ import constants from '../contants/contants';
 import { DrawerItemProps } from '../types';
 import { Search } from '../screens/search/Search';
 import { ChooseCar } from '../screens/choosecar/ChooseCar';
+import { ChoosePayment } from '../screens/choosepayment/ChoosePayment';
+import { AddPayment } from '../screens/addpayment/AddPayment';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -144,6 +146,18 @@ export const RootStack: FC<Props> = () => {
                     component={ChooseCar}
                     options={{
                         headerTitle: "",
+                    }} />
+                <Drawer.Screen
+                    name="ChoosePayment"
+                    component={ChoosePayment}
+                    options={{
+                        headerTitle: "Select payment",
+                    }} />
+                <Drawer.Screen
+                    name="AddPayment"
+                    component={AddPayment}
+                    options={{
+                        headerTitle: "Add payment",
                     }} />
             </Drawer.Navigator>
         </NavigationContainer>
