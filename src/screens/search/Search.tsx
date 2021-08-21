@@ -1,8 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
 import { GooglePlacesInput } from '../../components/GooglePlacesInput';
@@ -51,7 +49,7 @@ export const Search = () => {
 
             <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 100 }}>
                 <CustomButton
-                    onPress={() => navigation.navigate({ name: "Search" })}
+                    onPress={() => navigation.navigate({ name: "ChooseCar" })}
                     title="Next"
                     type="primary"
                 />

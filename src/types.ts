@@ -4,3 +4,14 @@ export interface DrawerItemProps {
     name: string;
     screen: string
 }
+
+export interface CarService {
+    id: number;
+    image: any;
+    name: string;
+    type: number;  //1 : economy *** 2: primium *** 3: Luxury
+    description: string;
+    price: number;
+    seats: number;
+    time?: string; 
+}
