@@ -12,6 +12,7 @@ export const Search = () => {
     const navigation = useNavigation<any>();
     useEffect(() => {
         navigation.setOptions({
+            headerTransparent: false,
             headerLeft: () => (
                 <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.goBack()}>
                     <Image source={require('../../resources/images/back.png')}
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         flex: 1,
         backgroundColor: colors.background,
-        paddingTop: 100
     },
     row: {
         flexDirection: 'row',
