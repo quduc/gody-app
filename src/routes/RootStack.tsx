@@ -10,6 +10,7 @@ import FastImage from 'react-native-fast-image';
 import constants from '../contants/contants';
 import { DrawerItemProps } from '../types';
 import { Search } from '../screens/search/Search';
+import { ChooseCar } from '../screens/choosecar/ChooseCar';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -135,6 +136,12 @@ export const RootStack: FC<Props> = () => {
                 <Drawer.Screen
                     name="Search"
                     component={Search}
+                    options={{
+                        headerTitle: "Search",
+                    }} />
+                <Drawer.Screen
+                    name="ChooseCar"
+                    component={ChooseCar}
                     options={{
                         headerTitle: "",
                     }} />
