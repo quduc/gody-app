@@ -6,10 +6,16 @@ import FastImage from 'react-native-fast-image';
 import { colors } from '../contants/colors';
 import { CustomText } from './CustomText';
 
-interface Props { }
-export const CustomCarPayment: FC<Props> = (props) => {
+interface Props {
+    onPress?: () => void;
+    iconRight?: any;
+    iconLeft: any;
+    cardInfo: string;
+}
+export const CustomCardPayment: FC<Props> = (props) => {
+    const { onPress, iconRight, iconLeft, cardInfo } = props;
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <FastImage
                     style={{
@@ -17,15 +23,18 @@ export const CustomCarPayment: FC<Props> = (props) => {
                         height: 40,
                         marginRight: 10
                     }}
-                    source={require('../resources/images/visa.png')}
+                    source={iconLeft}
                     resizeMode="contain"
                 />
-                <CustomText text="*** 9999" p1 />
+                <CustomText text={cardInfo} t2 />
             </View>
-            <FastImage
-                source={require('../resources/images/forward.png')}
-                style={{ width: 12, height: 12 }}
-            />
+            {iconRight && (
+                <FastImage
+                    source={iconRight}
+                    style={{ width: 16, height: 16 }}
+                    tintColor={colors.primary1}
+                />
+            )}
         </TouchableOpacity>
     )
 }
@@ -50,6 +59,6 @@ const styles = StyleSheet.create({
 
         elevation: 2,
 
-        marginVertical: 15
+        marginVertical: 10
     }
 })

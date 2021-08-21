@@ -5,10 +5,8 @@ import { FC } from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CustomButton } from '../../components/CustomButton';
-import { CustomCarPayment } from '../../components/CustomCarPayment';
+import { CustomCardPayment } from '../../components/CustomCardPayment';
 import { CustomText } from '../../components/CustomText';
-import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
-import { GooglePlacesInput } from '../../components/GooglePlacesInput';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
 import { CarService } from '../../types';
@@ -119,7 +117,12 @@ export const ChooseCar: FC<Props> = (props) => {
                             )
                         })}
                     </ScrollView>
-                    <CustomCarPayment />
+                    <CustomCardPayment
+                        cardInfo="*** 9999"
+                        iconRight={require('../../resources/images/forward.png')}
+                        iconLeft={require('../../resources/images/visa.png')}
+                        onPress={() => navigation.navigate("ChoosePayment")}
+                    />
                     <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
                         <CustomButton type="primary" title="Next" />
                     </View>
