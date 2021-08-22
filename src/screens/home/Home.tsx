@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { LogBox, StyleSheet, View, TouchableOpacity } from 'react-native';
@@ -22,7 +22,11 @@ interface Props {
 export const Home: FC<Props> = (props) => {
     const navigation = useNavigation<any>();
     const [keyword, setKeyword] = useState<string>();
-
+    useEffect(() => {
+        navigation.setOptions({
+            headerTransparent: true,
+        })
+    }, [])
     return (
         <View style={styles.container} >
             <MapboxGL.MapView

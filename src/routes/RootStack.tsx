@@ -14,6 +14,7 @@ import { ChooseCar } from '../screens/choosecar/ChooseCar';
 import { GodyPass } from '../screens/godypass/GodyPass';
 import { ChoosePayment } from '../screens/choosepayment/ChoosePayment';
 import { AddPayment } from '../screens/addpayment/AddPayment';
+import { FreeTrips } from '../screens/freetrips/FreeTrips';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -50,8 +51,8 @@ const drawerItems: DrawerItemProps[] = [
     },
     {
         "id": 5,
-        "name": "Free trip",
-        "screen": "FreeTrip",
+        "name": "Free trips",
+        "screen": "FreeTrips",
         "icon": require('../resources/images/free.png')
     },
     {
@@ -118,7 +119,7 @@ export const RootStack: FC<Props> = () => {
                 screenOptions={({ navigation }) => ({
                     headerLeftContainerStyle: { paddingLeft: 20 },
                     headerStyle: { shadowColor: 'transparent' },
-                    headerTransparent: true,
+                    headerTransparent: false,
                     headerLeft: () => (
                         <TouchableOpacity
                             onPress={() => navigation.openDrawer()}>
@@ -165,6 +166,12 @@ export const RootStack: FC<Props> = () => {
                     component={GodyPass}
                     options={{
                         headerTitle: "GODY Pass",
+                    }} />
+                <Drawer.Screen
+                    name="FreeTrips"
+                    component={FreeTrips}
+                    options={{
+                        headerTitle: "Free Trips",
                     }} />
             </Drawer.Navigator>
         </NavigationContainer>
