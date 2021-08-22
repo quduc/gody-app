@@ -40,6 +40,7 @@ export const CustomButton: FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
     button: {
+        marginVertical:10,
         height: 48,
         alignItems: 'center',
         justifyContent: 'center',

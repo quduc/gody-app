@@ -5,10 +5,12 @@ import FastImage from 'react-native-fast-image';
 import { TextInput } from 'react-native-gesture-handler';
 import { colors } from '../contants/colors';
 
-interface Props { 
+interface Props {
     onTouchStart?: () => void;
-    onChangeText?: (text:string) => void;
+    onChangeText?: (text: string) => void;
     placeholder?: string;
+    iconRight?: any
+    value?: string;
 }
 export const CustomInput: FC<Props> = (props) => {
     return (
@@ -22,11 +24,13 @@ export const CustomInput: FC<Props> = (props) => {
                 }}
                 onChangeText={props.onChangeText}
             />
-            <FastImage
-                source={require('../resources/images/delete.png')}
-                style={{ width: 10, height: 10 }}
-                tintColor={colors.neutral3}
-            />
+            {props.iconRight && (
+                <FastImage
+                    source={props.iconRight}
+                    style={{ width: 20, height: 20 }}
+                    tintColor={colors.primary1}
+                />
+            )}
         </View>
     )
 }
@@ -40,6 +44,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.neutral4,
         alignItems: 'center',
         borderRadius: 12,
-        marginVertical:10
+        marginVertical: 15
     }
 })
