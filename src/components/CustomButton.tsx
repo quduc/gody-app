@@ -9,11 +9,12 @@ interface Props extends ViewProps {
     onPress?: () => void;
     styleTitle?: TextStyle;
     leftIcon?: any;
+    rightIcon?: any;
     type: 'primary' | 'light';
 };
 
 export const CustomButton: FC<Props> = (props) => {
-    const { title, onPress, type, leftIcon } = props;
+    const { title, onPress, type, leftIcon, rightIcon } = props;
     var buttonColors: string = ''
     var textColor: string = '';
     switch (type) {
@@ -28,27 +29,57 @@ export const CustomButton: FC<Props> = (props) => {
     }
 
     return (
-        <TouchableOpacity style={[styles.button, { backgroundColor: buttonColors }]} onPress={onPress} >
-            {leftIcon && (<FastImage
-                style={{ width: 20, height: 20, marginRight: 10 }}
-                source={leftIcon}
-            />)}
-            <CustomText text={title} t2 />
-        </TouchableOpacity>
+        <>
+            {rightIcon
+                ? (
+                    <TouchableOpacity style={[styles.buttonBothIcon, { backgroundColor: buttonColors }]} onPress={onPress} >
+                        <View style={{ flexDirection: 'row' }}>
+                            {leftIcon && (<FastImage
+                                style={{ width: 20, height: 20, marginRight: 10 }}
+                                source={leftIcon}
+                            />)}
+                            <CustomText text={title} t2 />
+                        </View>
+                        <FastImage
+                            style={{ width: 15, height: 15 }}
+                            source={rightIcon}
+                        />
+                    </TouchableOpacity>
+                )
+                : (
+                    <TouchableOpacity style={[styles.button, { backgroundColor: buttonColors }]} onPress={onPress} >
+                        {leftIcon && (<FastImage
+                            style={{ width: 20, height: 20, marginRight: 10 }}
+                            source={leftIcon}
+                        />)}
+                        <CustomText text={title} t2 />
+                    </TouchableOpacity>
+                )}
+        </>
     );
 }
 
 const styles = StyleSheet.create({
     button: {
-        marginVertical:10,
+        marginVertical: 10,
         height: 48,
         alignItems: 'center',
         justifyContent: 'center',
         alignContent: 'center',
-        flex: 1,
         width: '100%',
         flexDirection: 'row',
-        borderRadius: 8
+        borderRadius: 8,
+    },
+    buttonBothIcon: {
+        marginVertical: 10,
+        height: 48,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        alignContent: 'center',
+        width: '100%',
+        flexDirection: 'row',
+        borderRadius: 8,
+        paddingHorizontal: 20
     },
     title: {
         textAlign: 'center',

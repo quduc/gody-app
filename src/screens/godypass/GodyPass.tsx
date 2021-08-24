@@ -18,13 +18,13 @@ export const GodyPass: FC<Props> = (props) => {
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
-            headerLeft: () => (
-                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.navigate("Home")}>
-                    <FastImage source={require('../../resources/images/back.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
-            )
+            // headerLeft: () => (
+            //     <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.navigate("Home")}>
+            //         <FastImage source={require('../../resources/images/back.png')}
+            //             style={{ width: 24, height: 24 }}
+            //         />
+            //     </TouchableOpacity>
+            // )
         })
     }, []);
 
