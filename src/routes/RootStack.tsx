@@ -14,6 +14,7 @@ import { ChooseCar } from '../screens/choosecar/ChooseCar';
 import { GodyPass } from '../screens/godypass/GodyPass';
 import { ChoosePayment } from '../screens/choosepayment/ChoosePayment';
 import { AddPayment } from '../screens/addpayment/AddPayment';
+import { Settings } from '../screens/settings/Settings';
 import { FreeTrips } from '../screens/freetrips/FreeTrips';
 const Drawer = createDrawerNavigator();
 interface Props { };
@@ -22,7 +23,7 @@ const drawerItems: DrawerItemProps[] = [
     {
         "id": 0,
         "name": "Your trip",
-        "screen": "YourTrip",
+        "screen": "Home",
         "icon": require('../resources/images/yourtrip.png')
     },
     {
@@ -172,6 +173,12 @@ export const RootStack: FC<Props> = () => {
                     component={FreeTrips}
                     options={{
                         headerTitle: "Free Trips",
+                    }} />
+                <Drawer.Screen
+                    name="Settings"
+                    component={Settings}
+                    options={{
+                        headerTitle: "Settings",
                     }} />
             </Drawer.Navigator>
         </NavigationContainer>
