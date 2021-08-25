@@ -16,6 +16,8 @@ import { ChoosePayment } from '../screens/choosepayment/ChoosePayment';
 import { AddPayment } from '../screens/addpayment/AddPayment';
 import { Settings } from '../screens/settings/Settings';
 import { FreeTrips } from '../screens/freetrips/FreeTrips';
+import { EditAccount } from '../screens/editaccount/EditAccount';
+import { UpdateUserInfo } from '../screens/updateuserinfo/UpdateUserInfo';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -84,7 +86,9 @@ export const RootStack: FC<Props> = () => {
         }
         return (
             <DrawerContentScrollView {...props} style={{ backgroundColor: colors.neutral4, flex: 1 }}>
-                <View style={styles.userInfo}>
+                <TouchableOpacity
+                    onPress={() => props.navigation.navigate("Settings")}
+                    style={styles.userInfo}>
                     <View style={styles.row}>
                         <View>
                             <Text text="Push Puttichai" t2 style={{ marginVertical: 5 }} />
@@ -95,7 +99,7 @@ export const RootStack: FC<Props> = () => {
                             source={require('../resources/images/Avatar.png')}
                         />
                     </View>
-                </View>
+                </TouchableOpacity>
                 <View style={{ height: constants.heightDevice - 220, paddingHorizontal: 20 }}>
                     {drawerItems.map((item: DrawerItemProps) => <DrawerItem key={item.id} item={item} />)}
                 </View>
@@ -179,6 +183,18 @@ export const RootStack: FC<Props> = () => {
                     component={Settings}
                     options={{
                         headerTitle: "Settings",
+                    }} />
+                <Drawer.Screen
+                    name="EditAccount"
+                    component={EditAccount}
+                    options={{
+                        headerTitle: "Edit account",
+                    }} />
+                <Drawer.Screen
+                    name="UpdateUserInfo"
+                    component={UpdateUserInfo}
+                    options={{
+                        headerTitle: "Edit account",
                     }} />
             </Drawer.Navigator>
         </NavigationContainer>
