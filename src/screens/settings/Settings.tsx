@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FC } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -9,9 +10,10 @@ import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
 
 export const Settings: FC = () => {
+    const navigation = useNavigation<any>();
     return (
         <CustomBackground>
-            <TouchableOpacity style={styles.user_info}>
+            <TouchableOpacity style={styles.user_info} onPress={() => navigation.navigate("EditAccount")}>
                 <View style={{ flexDirection: 'row' }}>
                     <FastImage
                         style={{ width: 56, height: 56, borderRadius: 56 }}
@@ -31,41 +33,41 @@ export const Settings: FC = () => {
                 />
             </TouchableOpacity>
             <CustomText text="For added security, please verity your email." p2 style={{ color: colors.neutral2 }} />
-            <CustomText text="Favourites" t2 style={{ color: colors.neutral2, marginVertical:10 }} />
-            
-            <CustomButton 
+            <CustomText text="Favourites" t2 style={{ color: colors.neutral2, marginVertical: 10 }} />
+
+            <CustomButton
                 leftIcon={require('../../resources/images/home.png')}
                 rightIcon={require('../../resources/images/forward.png')}
                 type="light"
                 title="Add home"
             />
-            <CustomButton 
+            <CustomButton
                 leftIcon={require('../../resources/images/work.png')}
                 rightIcon={require('../../resources/images/forward.png')}
                 type="light"
                 title="Add work"
             />
-            <CustomText text="Other" t2 style={{ color: colors.neutral2, marginVertical:10 }} />
-            
-            <CustomButton 
+            <CustomText text="Other" t2 style={{ color: colors.neutral2, marginVertical: 10 }} />
+
+            <CustomButton
                 leftIcon={require('../../resources/images/settings.png')}
                 rightIcon={require('../../resources/images/forward.png')}
                 type="light"
                 title="Privacy settings"
             />
-            <CustomButton 
+            <CustomButton
                 leftIcon={require('../../resources/images/secure.png')}
                 rightIcon={require('../../resources/images/forward.png')}
                 type="light"
                 title="Security"
             />
-            <CustomButton 
+            <CustomButton
                 leftIcon={require('../../resources/images/insurance.png')}
                 rightIcon={require('../../resources/images/forward.png')}
                 type="light"
                 title="Privacy & Policy"
             />
-            
+
         </CustomBackground>
     )
 }
