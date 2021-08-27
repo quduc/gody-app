@@ -18,6 +18,10 @@ import { Settings } from '../screens/settings/Settings';
 import { FreeTrips } from '../screens/freetrips/FreeTrips';
 import { EditAccount } from '../screens/editaccount/EditAccount';
 import { UpdateUserInfo } from '../screens/updateuserinfo/UpdateUserInfo';
+import { SignIn } from '../screens/signin/SignIn';
+import { Top } from '../screens/top/Top';
+import { SignUp } from '../screens/signup/SignUp';
+import { VerifyCode } from '../screens/verifycode/VerifyCode';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -120,7 +124,7 @@ export const RootStack: FC<Props> = () => {
         <NavigationContainer>
             <Drawer.Navigator
                 drawerContent={props => <CustomDrawerContent {...props} />}
-                initialRouteName="Home"
+                initialRouteName="Top"
                 screenOptions={({ navigation }) => ({
                     headerLeftContainerStyle: { paddingLeft: 20 },
                     headerStyle: { shadowColor: 'transparent' },
@@ -136,6 +140,31 @@ export const RootStack: FC<Props> = () => {
                     )
                 })}
             >
+                <Drawer.Screen
+                    name="Top"
+                    component={Top}
+                    options={{
+                        headerShown: false,
+                        headerTitle: "",
+                    }} />
+                <Drawer.Screen
+                    name="SignIn"
+                    component={SignIn}
+                    options={{
+                        headerTitle: "Sign In",
+                    }} />
+                <Drawer.Screen
+                    name="SignUp"
+                    component={SignUp}
+                    options={{
+                        headerTitle: "Sign Up",
+                    }} />
+                <Drawer.Screen
+                    name="VerifyCode"
+                    component={VerifyCode}
+                    options={{
+                        headerTitle: "Verify Code",
+                    }} />
                 <Drawer.Screen
                     name="Home"
                     component={Home}
