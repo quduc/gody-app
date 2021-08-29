@@ -22,6 +22,7 @@ import { SignIn } from '../screens/signin/SignIn';
 import { Top } from '../screens/top/Top';
 import { SignUp } from '../screens/signup/SignUp';
 import { VerifyCode } from '../screens/verifycode/VerifyCode';
+import { BookingStack } from './BookingStack';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -29,7 +30,7 @@ const drawerItems: DrawerItemProps[] = [
     {
         "id": 0,
         "name": "Your trip",
-        "screen": "Home",
+        "screen": "BookingStack",
         "icon": require('../resources/images/yourtrip.png')
     },
     {
@@ -124,7 +125,7 @@ export const RootStack: FC<Props> = () => {
         <NavigationContainer>
             <Drawer.Navigator
                 drawerContent={props => <CustomDrawerContent {...props} />}
-                initialRouteName="Top"
+                initialRouteName="Home"
                 screenOptions={({ navigation }) => ({
                     headerLeftContainerStyle: { paddingLeft: 20 },
                     headerStyle: { shadowColor: 'transparent' },
@@ -166,35 +167,13 @@ export const RootStack: FC<Props> = () => {
                         headerTitle: "Verify Code",
                     }} />
                 <Drawer.Screen
-                    name="Home"
-                    component={Home}
+                    name="BookingStack"
+                    component={BookingStack}
                     options={{
-                        headerTitle: "",
+                        headerShown: false
                     }} />
-                <Drawer.Screen
-                    name="Search"
-                    component={Search}
-                    options={{
-                        headerTitle: "Search",
-                    }} />
-                <Drawer.Screen
-                    name="ChooseCar"
-                    component={ChooseCar}
-                    options={{
-                        headerTitle: "",
-                    }} />
-                <Drawer.Screen
-                    name="ChoosePayment"
-                    component={ChoosePayment}
-                    options={{
-                        headerTitle: "Select payment",
-                    }} />
-                <Drawer.Screen
-                    name="AddPayment"
-                    component={AddPayment}
-                    options={{
-                        headerTitle: "Add payment",
-                    }} />
+
+
                 <Drawer.Screen
                     name="GodyPass"
                     component={GodyPass}

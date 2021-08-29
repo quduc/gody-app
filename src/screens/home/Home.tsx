@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import { LogBox, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { LogBox, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import constants from '../../contants/contants';
 import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesInput } from '../../components/GooglePlacesInput';
-import FastImage from 'react-native-fast-image';
 import { colors } from '../../contants/colors';
-import { CustomText } from '../../components/CustomText';
 import { CustomButton } from '../../components/CustomButton';
 
 LogBox.ignoreLogs(['ReactNativeFiberHostComponent']);
@@ -25,6 +23,13 @@ export const Home: FC<Props> = (props) => {
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: true,
+            headerLeft: () => (
+                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.openDrawer()}>
+                    <Image source={require('../../resources/images/list.png')}
+                        style={{ width: 24, height: 24 }}
+                    />
+                </TouchableOpacity>
+            )
         })
     }, [])
     return (
