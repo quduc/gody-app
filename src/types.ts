@@ -13,5 +13,11 @@ export interface CarService {
     description: string;
     price: number;
     seats: number;
-    time?: string; 
+    time?: string;
+}
+
+export interface Auth {
+    __typename: "Auth";
+    access_token: string;
+    expires_in: number;
 }
