@@ -21,3 +21,12 @@ export interface Auth {
     access_token: string;
     expires_in: number;
 }
+
+export interface LocationGeometry {
+    lat : number; //latitude
+    lng : number; //longitude
+}
+export interface Location {
+    location : LocationGeometry;
+    description : string;
+}

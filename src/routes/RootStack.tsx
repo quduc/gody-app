@@ -125,7 +125,7 @@ export const RootStack: FC<Props> = () => {
         <NavigationContainer>
             <Drawer.Navigator
                 drawerContent={props => <CustomDrawerContent {...props} />}
-                initialRouteName="Home"
+                initialRouteName="BookingStack"
                 screenOptions={({ navigation }) => ({
                     headerLeftContainerStyle: { paddingLeft: 20 },
                     headerStyle: { shadowColor: 'transparent' },

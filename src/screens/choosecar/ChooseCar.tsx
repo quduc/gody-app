@@ -1,9 +1,9 @@
-import MapboxGL from '@react-native-mapbox-gl/maps';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomCardPayment } from '../../components/CustomCardPayment';
 import { CustomText } from '../../components/CustomText';
@@ -97,16 +97,18 @@ export const ChooseCar: FC<Props> = (props) => {
     }
     return (
         <View style={styles.container} >
-            <MapboxGL.MapView
-                style={styles.map}
-                logoEnabled={false}
-            >
-                <MapboxGL.Camera
-                    zoomLevel={15}
-                    centerCoordinate={[106.606120, 16.612990]}
+            <View style={styles.map}>
+                <MapView
+                    provider={PROVIDER_GOOGLE}
+                    style={StyleSheet.absoluteFillObject}
+                    initialRegion={{
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
                 />
-                <MapboxGL.PointAnnotation id="1" coordinate={[106.606120, 16.612990]} />
-            </MapboxGL.MapView>
+            </View>
             <View style={styles.search}>
                 <CustomText text="Chooose a trip or swipe up for more" t2 />
                 <View>

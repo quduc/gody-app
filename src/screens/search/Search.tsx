@@ -1,14 +1,19 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import React, { FC, useEffect } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
 import { GooglePlacesInput } from '../../components/GooglePlacesInput';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
+import { Location } from '../../types';
 
+interface Props {
+    route: RouteProp<{ params: { origin: Location } }, 'params'>
+}
 
-export const Search = () => {
+export const Search: FC<Props> = ({ route: { params: { origin } } }) => {
+    console.log(origin);
     const navigation = useNavigation<any>();
     useEffect(() => {
         navigation.setOptions({
@@ -28,7 +33,9 @@ export const Search = () => {
                 <View style={styles.dot} />
                 <View style={{ width: 10 }} />
                 <View style={{ width: constants.widthDevice - 60 }}>
-                    <GooglePlacesInput />
+                    <GooglePlacesInput 
+                        placeholder={origin.description}
+                    />
                 </View>
 
             </View>

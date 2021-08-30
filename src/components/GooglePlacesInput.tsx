@@ -9,13 +9,10 @@ import { CustomTextFieldWithIcon } from './CustomTextFiledWithIcon';
 import { CustomPlacesItem } from './CustomPlacesItem';
 interface Props {
     placeholder?: string;
+    onPress?: (data: any, detail: any) => void;
 }
 export const GooglePlacesInput: FC<Props> = (props) => {
-    // const ref = useRef<any>();
-
-    // useEffect(() => {
-    //     ref.current?.clear();
-    // }, []);
+    
     return (
         <GooglePlacesAutocomplete
             // ref={ref}
@@ -44,13 +41,10 @@ export const GooglePlacesInput: FC<Props> = (props) => {
                 },
             }}
 
-            onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-                console.log(data, details);
-            }}
+            onPress={props.onPress}
             enablePoweredByContainer={false}
             query={{
-                key: 'AIzaSyDe_0_v2DGBnYrEnMMAicfX1xW6_SYztSs',
+                key: 'AIzaSyDs8sfCQvir5pN30O0KdgE2kU-7HjW4DMI',
                 language: 'vi',
                 components: 'country:vn',
 
