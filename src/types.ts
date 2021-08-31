@@ -23,10 +23,18 @@ export interface Auth {
 }
 
 export interface LocationGeometry {
-    lat : number; //latitude
-    lng : number; //longitude
+    lat: number; //latitude
+    lng: number; //longitude
 }
 export interface Location {
-    location : LocationGeometry;
-    description : string;
+    location: LocationGeometry;
+    description: string;
+}
+
+export interface Booking {
+    origin: Location;
+    destination: Location;
+    fare: number;
+    distance: number;
+    car_service: CarService;
 }

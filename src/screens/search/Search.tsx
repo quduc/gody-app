@@ -1,20 +1,33 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
-import React, { FC, useEffect } from 'react';
+import { observer } from 'mobx-react';
+import React, { FC, useEffect, useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
 import { GooglePlacesInput } from '../../components/GooglePlacesInput';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
+import { useStore } from '../../store/useStore';
 import { Location } from '../../types';
 
 interface Props {
-    route: RouteProp<{ params: { origin: Location } }, 'params'>
+    // route: RouteProp<{ params: { origin: Location } }, 'params'>
 }
-
-export const Search: FC<Props> = ({ route: { params: { origin } } }) => {
-    console.log(origin);
+const destinationDummy = {
+    "location": {
+        "lat": 16.6328871,
+        "lng": 106.7383723
+    },
+    "description": "Green Hotel"
+}
+export const Search: FC<Props> = observer((props) => {
     const navigation = useNavigation<any>();
+    const store = useStore();
+    const [destination, setDestination] = useState<Location>(destinationDummy);
+
+    store.saveBooking({
+        ...store.booking!, destination
+    })
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
@@ -33,8 +46,9 @@ export const Search: FC<Props> = ({ route: { params: { origin } } }) => {
                 <View style={styles.dot} />
                 <View style={{ width: 10 }} />
                 <View style={{ width: constants.widthDevice - 60 }}>
-                    <GooglePlacesInput 
-                        placeholder={origin.description}
+                    <GooglePlacesInput
+                        defaultValue={store.booking?.origin.description}
+                        placeholder={store.booking?.origin.description}
                     />
                 </View>
 
@@ -43,7 +57,9 @@ export const Search: FC<Props> = ({ route: { params: { origin } } }) => {
                 <View style={styles.dot} />
                 <View style={{ width: 10 }} />
                 <View style={{ width: constants.widthDevice - 60 }}>
-                    <GooglePlacesInput />
+                    <GooglePlacesInput
+                        defaultValue={destination.description}
+                    />
                 </View>
             </View>
             <CustomTextFieldWithIcon
@@ -57,14 +73,14 @@ export const Search: FC<Props> = ({ route: { params: { origin } } }) => {
 
             <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 100 }}>
                 <CustomButton
-                    onPress={() => navigation.navigate({ name: "ChooseCar" })}
+                    onPress={() => navigation.navigate("ChooseCar")}
                     title="Next"
                     type="primary"
                 />
             </View>
         </View>
     );
-};
+});
 
 const styles = StyleSheet.create({
     container: {
