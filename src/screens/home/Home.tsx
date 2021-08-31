@@ -59,11 +59,12 @@ export const Home: FC<Props> = observer((props) => {
         }));
     }, [])
 
+
     const getUserLocation = () => {
-        Geolocation.getCurrentPosition(info => setUserLocation({
-            longitude: info.coords.longitude,
-            latitude: info.coords.latitude
-        }));
+        // Geolocation.getCurrentPosition(info => setUserLocation({
+        //     longitude: info.coords.longitude,
+        //     latitude: info.coords.latitude
+        // }));
     }
 
     return (
