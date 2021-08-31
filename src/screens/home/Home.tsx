@@ -11,6 +11,8 @@ import { Location } from '../../types';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import FastImage from 'react-native-fast-image';
 import Geolocation from '@react-native-community/geolocation';
+import { observer } from 'mobx-react';
+import { useStore } from '../../store/useStore';
 
 LogBox.ignoreLogs(['ReactNativeFiberHostComponent']);
 LogBox.ignoreLogs(['Mapbox warning Falling back']);
@@ -29,12 +31,17 @@ const originDummy = {
     },
     "description": "31 Lê Quý Đôn, An Hà, Lao Bảo, Hướng Hóa, Quảng Trị"
 }
-export const Home: FC<Props> = (props) => {
+export const Home: FC<Props> = observer((props) => {
     const navigation = useNavigation<any>();
     const [keyword, setKeyword] = useState<string>();
     const [origin, setOrigin] = useState<Location>(originDummy);
     const [userLocation, setUserLocation] = useState<any>();
 
+    const store = useStore();
+    const { booking } = store;
+    store.saveBooking({
+        ...booking!, origin
+    })
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: true,
@@ -65,12 +72,11 @@ export const Home: FC<Props> = (props) => {
                 <MapView
                     provider={PROVIDER_GOOGLE}
                     style={StyleSheet.absoluteFillObject}
-
                     initialRegion={{
-                        latitude: 16.6131203,
-                        longitude: 106.5982622,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
+                        latitude: originDummy.location.lat,
+                        longitude: originDummy.location.lng,
+                        latitudeDelta: 0.008922,
+                        longitudeDelta: 0.008421,
                     }}
                 >
                     {origin &&
@@ -107,7 +113,7 @@ export const Home: FC<Props> = (props) => {
                     <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 30, flexDirection: 'row' }}>
                         <View style={{ width: 117, marginRight: 20 }}>
                             <CustomButton
-                                onPress={() => navigation.navigate("Search", { origin })}
+                                onPress={() => navigation.navigate("Search")}
                                 title="Trips"
                                 type="primary"
                                 leftIcon={require('../../resources/images/car.png')}
@@ -115,7 +121,7 @@ export const Home: FC<Props> = (props) => {
                         </View>
                         <View style={{ width: 117 }}>
                             <CustomButton
-                                onPress={() => navigation.navigate("Search", { origin })}
+                                onPress={() => navigation.navigate("Search", { origin: originDummy })}
                                 title="Eats"
                                 type="light"
                                 leftIcon={require('../../resources/images/food.png')}
@@ -137,7 +143,7 @@ export const Home: FC<Props> = (props) => {
             </TouchableOpacity>
         </View>
     )
-}
+});
 
 const styles = StyleSheet.create({
     container: {

@@ -1,4 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
+import { RouteProp } from '@react-navigation/native';
+import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -9,11 +11,10 @@ import { CustomCardPayment } from '../../components/CustomCardPayment';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
-import { CarService } from '../../types';
+import { useStore } from '../../store/useStore';
+import { CarService, Location } from '../../types';
 
-interface Props {
 
-}
 
 const carServices: CarService[] = [
     {
@@ -47,10 +48,11 @@ const carServices: CarService[] = [
         "time": "1-4 min"
     }
 ]
-export const ChooseCar: FC<Props> = (props) => {
 
+interface Props { }
+export const ChooseCar: FC<Props> = observer((props) => {
+    const store = useStore();
     const [service, setService] = useState<number>(1);
-
     const navigation = useNavigation<any>();
     useEffect(() => {
         navigation.setOptions({
@@ -96,16 +98,17 @@ export const ChooseCar: FC<Props> = (props) => {
         )
     }
     return (
-        <View style={styles.container} >
+        <View style={styles.container}>
             <View style={styles.map}>
                 <MapView
                     provider={PROVIDER_GOOGLE}
+                    maxZoomLevel={16}
                     style={StyleSheet.absoluteFillObject}
                     initialRegion={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
+                        latitude: store.booking?.origin.location.lat ?? 16.6328871,
+                        longitude: store.booking?.origin.location.lng ?? 106.7383723,
+                        latitudeDelta: 0.008922,
+                        longitudeDelta: 0.008421,
                     }}
                 />
             </View>
@@ -133,7 +136,7 @@ export const ChooseCar: FC<Props> = (props) => {
             </View>
         </View>
     )
-}
+});
 
 const styles = StyleSheet.create({
     container: {
