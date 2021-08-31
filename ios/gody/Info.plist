@@ -35,6 +35,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We needs access to your location to show you relevant search results. With "Always" access we'll also send you some nice notification</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location access is required to run the app.</string>
 	<key>UILaunchStoryboardName</key>

@@ -8,7 +8,9 @@ import { GooglePlacesInput } from '../../components/GooglePlacesInput';
 import { colors } from '../../contants/colors';
 import { CustomButton } from '../../components/CustomButton';
 import { Location } from '../../types';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import FastImage from 'react-native-fast-image';
+import Geolocation from '@react-native-community/geolocation';
 
 LogBox.ignoreLogs(['ReactNativeFiberHostComponent']);
 LogBox.ignoreLogs(['Mapbox warning Falling back']);
@@ -16,12 +18,23 @@ LogBox.ignoreLogs(['Mapbox warning Falling back']);
 // MapboxGL.setAccessToken(constants.MapBoxKey);
 
 interface Props {
-    navigation: any; //open drawer
+    navigation: any;
+}
+
+//TODO: set dummy origin location
+const originDummy = {
+    "location": {
+        "lat": 16.6077752,
+        "lng": 106.6043628
+    },
+    "description": "31 Lê Quý Đôn, An Hà, Lao Bảo, Hướng Hóa, Quảng Trị"
 }
 export const Home: FC<Props> = (props) => {
     const navigation = useNavigation<any>();
     const [keyword, setKeyword] = useState<string>();
-    const [origin, setOrigin] = useState<Location>();
+    const [origin, setOrigin] = useState<Location>(originDummy);
+    const [userLocation, setUserLocation] = useState<any>();
+
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: true,
@@ -32,28 +45,55 @@ export const Home: FC<Props> = (props) => {
                     />
                 </TouchableOpacity>
             )
-        })
+        });
+        Geolocation.getCurrentPosition(info => setUserLocation({
+            longitude: info.coords.longitude,
+            latitude: info.coords.latitude
+        }));
     }, [])
+
+    const getUserLocation = () => {
+        Geolocation.getCurrentPosition(info => setUserLocation({
+            longitude: info.coords.longitude,
+            latitude: info.coords.latitude
+        }));
+    }
+
     return (
         <View style={styles.container} >
             <View style={styles.map}>
                 <MapView
                     provider={PROVIDER_GOOGLE}
                     style={StyleSheet.absoluteFillObject}
+
                     initialRegion={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
+                        latitude: 16.6131203,
+                        longitude: 106.5982622,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
-                />
+                >
+                    {origin &&
+                        <Marker
+                            key='origin'
+                            coordinate={{ latitude: origin.location.lat, longitude: origin.location.lng }}
+
+                        >
+                            <FastImage
+                                source={require('../../resources/images/car_map.png')}
+                                style={{ width: 16, height: 32 }}
+                            />
+                        </Marker>
+                    }
+                </MapView>
             </View>
             <View style={styles.search}>
                 <GooglePlacesInput
-                    onPress={(data, detail = null) => setOrigin({
-                        location: detail.geometry.location,
-                        description: data.description
-                    })}
+                    // onPress={(data, detail = null) => setOrigin({
+                    //     location: detail.geometry.location,
+                    //     description: data.description
+                    // })}
+                    defaultValue={originDummy.description}
                 />
                 <View >
                     <CustomTextFieldWithIcon
@@ -85,6 +125,16 @@ export const Home: FC<Props> = (props) => {
                     </View>
                 </View>
             </View>
+
+            <TouchableOpacity
+                onPress={getUserLocation}
+                style={styles.location_btn}
+            >
+                <FastImage
+                    style={{ width: 25, height: 25 }}
+                    source={require('../../resources/images/marker.png')}
+                />
+            </TouchableOpacity>
         </View>
     )
 }
@@ -116,54 +166,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: colors.primary1,
         marginRight: 20
+    },
+    location_btn: {
+        position: 'absolute',
+        width: 48,
+        height: 48,
+        borderRadius: 48,
+        backgroundColor: colors.white,
+        right: 15,
+        top: constants.heightDevice / 2 - 100,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
-{/* <MapboxGL.MapView
-                style={styles.map}
-                logoEnabled={false}
-            >
-                <MapboxGL.Camera
-                    zoomLevel={15}
-                    centerCoordinate={[106.606120, 16.612990]}
-                />
-                <MapboxGL.PointAnnotation id="1" coordinate={origin
-                    ? [origin.location.lng, origin.location.lat]
-                    : [106.606120, 16.612990]} />
-            </MapboxGL.MapView> */}
-{/* <View style={styles.search}>
-                <GooglePlacesInput
-                    onPress={(data, detail = null) => setOrigin({
-                        location: detail.geometry.location,
-                        description: data.description
-                    })}
-                />
-                <View >
-                    <CustomTextFieldWithIcon
-                        text="Add home"
-                        icon={require('../../resources/images/star.png')}
-                    />
-                    <CustomTextFieldWithIcon
-                        text="Set location on map"
-                        icon={require('../../resources/images/home.png')}
-                    />
-                    <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 30, flexDirection: 'row' }}>
-                        <View style={{ width: 117, marginRight: 20 }}>
-                            <CustomButton
-                                onPress={() => navigation.navigate("Search", { origin })}
-                                title="Trips"
-                                type="primary"
-                                leftIcon={require('../../resources/images/car.png')}
-                            />
-                        </View>
-                        <View style={{ width: 117 }}>
-                            <CustomButton
-                                onPress={() => navigation.navigate("Search", { origin })}
-                                title="Eats"
-                                type="light"
-                                leftIcon={require('../../resources/images/food.png')}
-                            />
-                        </View>
-
-                    </View>
-                </View>
-            </View> */}
