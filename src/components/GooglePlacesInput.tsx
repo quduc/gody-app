@@ -1,18 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
-import { TextInput } from 'react-native-gesture-handler';
 import { colors } from '../contants/colors';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { CustomTextFieldWithIcon } from './CustomTextFiledWithIcon';
 import { CustomPlacesItem } from './CustomPlacesItem';
 interface Props {
     placeholder?: string;
     onPress?: (data: any, detail: any) => void;
+    defaultValue?: string;
+
 }
 export const GooglePlacesInput: FC<Props> = (props) => {
-    
+
     return (
         <GooglePlacesAutocomplete
             // ref={ref}
@@ -25,11 +24,14 @@ export const GooglePlacesInput: FC<Props> = (props) => {
                     />
                 )
             }}
+            textInputProps={{
+                value: props.defaultValue
+            }}
             fetchDetails={true}
             styles={{
                 container: {
                     flex: 0,
-                    width:'100%'
+                    width: '100%'
                 },
                 textInput: {
                     width: '80%',
@@ -44,7 +46,7 @@ export const GooglePlacesInput: FC<Props> = (props) => {
             onPress={props.onPress}
             enablePoweredByContainer={false}
             query={{
-                key: 'AIzaSyDs8sfCQvir5pN30O0KdgE2kU-7HjW4DMI',
+                key: 'AIzaSyDm5a1M243n4mAdYU6VAaPyTtT_KWFLuDc',
                 language: 'vi',
                 components: 'country:vn',
 
