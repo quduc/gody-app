@@ -3,11 +3,14 @@ import { RouteProp } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
+import { Alert } from 'react-native';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { getDistanceAndTime } from '../../API';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomCardPayment } from '../../components/CustomCardPayment';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
@@ -52,19 +55,16 @@ const carServices: CarService[] = [
 interface Props { }
 export const ChooseCar: FC<Props> = observer((props) => {
     const store = useStore();
+    const { booking } = store;
+    console.log(booking?.fare);
     const [service, setService] = useState<number>(1);
     const navigation = useNavigation<any>();
     useEffect(() => {
         navigation.setOptions({
-            headerLeft: () => (
-                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.navigate("Search")}>
-                    <FastImage source={require('../../resources/images/back.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
-            )
+            headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("Search")} />
         })
     }, [])
+
 
     const CarServiceItem = ({ carService }: any) => {
         return (
@@ -90,10 +90,16 @@ export const ChooseCar: FC<Props> = observer((props) => {
                         source={require('../../resources/images/clock.png')}
                         tintColor={colors.neutral2}
                     />
-                    <CustomText text={carService.time} s style={{ color: colors.neutral1 }} />
+                    <CustomText text={booking?.duration.text} s style={{ color: colors.neutral1 }} />
                 </View>
                 <CustomText text={carService.description} s style={{ marginTop: 10, color: colors.neutral2, textAlign: 'center' }} />
-                <CustomText text={`$ ${carService.price}`} t1 style={{ marginTop: 15, color: colors.primary1, textAlign: 'center' }} />
+                <CustomText
+                    text={`${carService.type === 1 ? booking?.fare
+                            : carService.type === 2 ? booking?.fare && booking?.fare * 1.5
+                                : booking?.fare && booking?.fare * 2
+                        }$`}
+                    t1
+                    style={{ marginTop: 15, color: colors.primary1, textAlign: 'center' }} />
             </TouchableOpacity>
         )
     }
@@ -129,7 +135,7 @@ export const ChooseCar: FC<Props> = observer((props) => {
                         onPress={() => navigation.navigate("ChoosePayment")}
                     />
                     <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
-                        <CustomButton type="primary" title="Next" />
+                        <CustomButton type="primary" title="Next" onPress={() => { }} />
                     </View>
 
                 </View>

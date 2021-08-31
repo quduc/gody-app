@@ -1,3 +1,31 @@
+export interface GoogleDistanceResponse {
+    __typename: 'GoogleDistanceResponse';
+    status: string;
+    error_message: string;
+    rows: [
+        {
+            elements: [
+                {
+                    distance: {
+                        text: string;
+                        value: number;
+                    },
+                    duration: {
+                        text: string;
+                        value: number;
+                    },
+                    status: string;
+                }
+            ]
+        }
+    ]
+}
+
+export interface Auth {
+    __typename: "Auth";
+    access_token: string;
+    expires_in: number;
+}
 export interface DrawerItemProps {
     id: number;
     icon: any;
@@ -15,13 +43,6 @@ export interface CarService {
     seats: number;
     time?: string;
 }
-
-export interface Auth {
-    __typename: "Auth";
-    access_token: string;
-    expires_in: number;
-}
-
 export interface LocationGeometry {
     lat: number; //latitude
     lng: number; //longitude
@@ -35,6 +56,8 @@ export interface Booking {
     origin: Location;
     destination: Location;
     fare: number;
-    distance: number;
+    distance: any;
+    duration: any;
     car_service: CarService;
 }
+

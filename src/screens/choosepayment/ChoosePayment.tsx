@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
@@ -7,24 +8,19 @@ import { AddPaymentMethod } from '../../components/AddPaymentMethod';
 import { CustomBackground } from '../../components/CustomBackground';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomCardPayment } from '../../components/CustomCardPayment';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
 
 interface Props { }
-export const ChoosePayment: FC<Props> = (props) => {
+export const ChoosePayment: FC<Props> = observer((props) => {
 
     const navigation = useNavigation<any>();
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
-            headerLeft: () => (
-                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.navigate("ChooseCar")}>
-                    <FastImage source={require('../../resources/images/back.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
-            )
+            headerLeft: () => <CustomHeaderLeft type="goback" onPress={() => navigation.navigate("ChooseCar")} />
         })
     }, [])
     return (
@@ -62,4 +58,4 @@ export const ChoosePayment: FC<Props> = (props) => {
             </View>
         </CustomBackground>
     )
-}
+});

@@ -1,14 +1,18 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { FC, useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
+import { getDistanceAndTime } from '../../API';
 import { CustomButton } from '../../components/CustomButton';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
 import { GooglePlacesInput } from '../../components/GooglePlacesInput';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
 import { useStore } from '../../store/useStore';
 import { Location } from '../../types';
+import { calculateFare } from '../../utils/CalculateFare';
 
 interface Props {
     // route: RouteProp<{ params: { origin: Location } }, 'params'>
@@ -25,21 +29,41 @@ export const Search: FC<Props> = observer((props) => {
     const store = useStore();
     const [destination, setDestination] = useState<Location>(destinationDummy);
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     store.saveBooking({
         ...store.booking!, destination
     })
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
-            headerLeft: () => (
-                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.goBack()}>
-                    <Image source={require('../../resources/images/back.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
-            )
+            headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
         })
-    }, [])
+    }, []);
+
+    const onGoToChooseCar = async () => {
+        setLoading(true);
+        const response = await getDistanceAndTime(store.booking?.origin, store.booking?.destination);
+        if (response.status === 'OK') {
+            const totalFare = calculateFare(response.rows[0].elements[0].distance, response.rows[0].elements[0].duration);
+            store.saveBooking({
+                ...store.booking!,
+                distance: response.rows[0].elements[0].distance,
+                duration: response.rows[0].elements[0].duration,
+                fare: totalFare
+            })
+            navigation.navigate("ChooseCar");
+        } else {
+            Alert.alert(
+                "",
+                `${response.error_message}`,
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            )
+        }
+        setLoading(false);
+    }
     return (
         <View style={styles.container} >
             <View style={styles.row}>
@@ -73,11 +97,12 @@ export const Search: FC<Props> = observer((props) => {
 
             <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 100 }}>
                 <CustomButton
-                    onPress={() => navigation.navigate("ChooseCar")}
+                    onPress={onGoToChooseCar}
                     title="Next"
                     type="primary"
                 />
             </View>
+            <LoadingOverlay loading={loading} />
         </View>
     );
 });
