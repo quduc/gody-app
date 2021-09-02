@@ -1,30 +1,42 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { loginApp } from '../../API';
 import { CustomBackground } from '../../components/CustomBackground';
 import { CustomButton } from '../../components/CustomButton';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { colors } from '../../contants/colors';
+import { useStore } from '../../store/useStore';
 
 export const SignIn: FC = () => {
     const navigation = useNavigation<any>();
+    const [phone, setPhone] = useState<string>('0964232825');
+    const [password, setPassword] = useState<string>('Toanh123!@#');
+    const [loading, setLoading] = useState<boolean>(false);
+    const store = useStore();
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
-            headerLeft: () => (
-                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.goBack()}>
-                    <FastImage source={require('../../resources/images/back.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
-            )
+            headerLeft: () => <CustomHeaderLeft type="goback" onPress={() => navigation.navigate("Top")} />
         })
     }, [])
+
+    const onLogin = async () => {
+        setLoading(true);
+        const response = await loginApp(phone, password);
+        if (response.__typename !== 'ErrorResponse') {
+            store.saveAuth(response.result);
+            navigation.navigate("BookingStack");
+        }
+        setLoading(false);
+    }
     return (
         <CustomBackground>
-            <CustomText text="Enter your mobile number:" t2 style={{ color: colors.neutral2, marginTop: 20 }} />
+            <CustomText text="Enter your account:" t2 style={{ color: colors.neutral2, marginVertical: 20 }} />
             <View style={styles.phone}>
                 <FastImage
                     style={{ width: 30, height: 24 }}
@@ -32,7 +44,8 @@ export const SignIn: FC = () => {
                 />
                 <CustomText p1 text="+84" style={{ marginHorizontal: 10 }} />
                 <TextInput
-                    value="935 007 581"
+                    value={phone}
+                    onChangeText={(text) => setPhone(text)}
                     style={{
                         color: colors.neutral1,
                         fontSize: 18,
@@ -42,15 +55,27 @@ export const SignIn: FC = () => {
                     }}
                 />
             </View>
+            <View style={styles.phone}>
+                <TextInput
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                    secureTextEntry
+                    placeholder="Enter your password"
+                    style={{
+                        color: colors.neutral1,
+                        fontSize: 18,
+                        paddingHorizontal: 10,
+                        width: '100%'
+                    }}
+                />
+            </View>
+
             <CustomButton
-                title="Send"
+                title="Submit"
                 type="primary"
-                onPress={() => navigation.navigate("VerifyCode", {
-                    phoneNumber: "935 007 581"
-                })}
+                onPress={onLogin}
             />
-            <CustomText text="Buy cotinuing you may receive an SMS for verification. Message and data rates may apply."
-                s style={{ color: colors.neutral2 }} />
+            <LoadingOverlay loading={loading} />
         </CustomBackground>
     )
 }
@@ -58,7 +83,7 @@ const styles = StyleSheet.create({
     phone: {
         flexDirection: 'row',
         paddingHorizontal: 20,
-        marginVertical: 20,
+        marginBottom: 20,
         borderWidth: 1,
         borderColor: colors.neutral2,
         height: 48,

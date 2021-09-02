@@ -23,7 +23,7 @@ export interface GoogleDistanceResponse {
 
 export interface Auth {
     __typename: "Auth";
-    access_token: string;
+    token: string;
     expires_in: number;
 }
 export interface DrawerItemProps {
@@ -60,4 +60,17 @@ export interface Booking {
     duration: any;
     car_service: CarService;
 }
+
+export interface ObjectResponse<T> {
+    __typename: 'ObjectResponse';
+    result: T
+}
+export interface BaseResponse {
+    __typename: "BaseResponse";
+}
+
+export interface ErrorResponse {
+    __typename: "ErrorResponse";
+    error: string;
+};
 

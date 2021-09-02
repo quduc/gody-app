@@ -16,6 +16,7 @@ import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
 import { useStore } from '../../store/useStore';
 import { CarService, Location } from '../../types';
+import MapViewDirections from 'react-native-maps-directions';
 
 
 
@@ -56,7 +57,6 @@ interface Props { }
 export const ChooseCar: FC<Props> = observer((props) => {
     const store = useStore();
     const { booking } = store;
-    console.log(booking?.fare);
     const [service, setService] = useState<number>(1);
     const navigation = useNavigation<any>();
     useEffect(() => {
@@ -65,6 +65,9 @@ export const ChooseCar: FC<Props> = observer((props) => {
         })
     }, [])
 
+    const confirmPickup = () => {
+
+    }
 
     const CarServiceItem = ({ carService }: any) => {
         return (
@@ -95,8 +98,8 @@ export const ChooseCar: FC<Props> = observer((props) => {
                 <CustomText text={carService.description} s style={{ marginTop: 10, color: colors.neutral2, textAlign: 'center' }} />
                 <CustomText
                     text={`${carService.type === 1 ? booking?.fare
-                            : carService.type === 2 ? booking?.fare && booking?.fare * 1.5
-                                : booking?.fare && booking?.fare * 2
+                        : carService.type === 2 ? booking?.fare && booking?.fare * 1.5
+                            : booking?.fare && booking?.fare * 2
                         }$`}
                     t1
                     style={{ marginTop: 15, color: colors.primary1, textAlign: 'center' }} />
@@ -116,7 +119,13 @@ export const ChooseCar: FC<Props> = observer((props) => {
                         latitudeDelta: 0.008922,
                         longitudeDelta: 0.008421,
                     }}
-                />
+                >
+                    {/* <MapViewDirections
+                        origin={{ latitude: booking?.origin.location.lat ?? 16.6328871, longitude: booking?.origin.location.lng ?? 106.7383723 }}
+                        destination={{ latitude: booking?.destination.location.lat ?? 16.6328871, longitude: booking?.destination.location.lng ?? 106.7383723 }}
+                        apikey={constants.directionKeyAPI}
+                    /> */}
+                </MapView>
             </View>
             <View style={styles.search}>
                 <CustomText text="Chooose a trip or swipe up for more" t2 />
@@ -135,7 +144,7 @@ export const ChooseCar: FC<Props> = observer((props) => {
                         onPress={() => navigation.navigate("ChoosePayment")}
                     />
                     <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
-                        <CustomButton type="primary" title="Next" onPress={() => { }} />
+                        <CustomButton type="primary" title="Next" onPress={confirmPickup} />
                     </View>
 
                 </View>
