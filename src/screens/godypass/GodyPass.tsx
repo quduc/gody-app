@@ -18,13 +18,6 @@ export const GodyPass: FC<Props> = (props) => {
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
-            // headerLeft: () => (
-            //     <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.navigate("Home")}>
-            //         <FastImage source={require('../../resources/images/back.png')}
-            //             style={{ width: 24, height: 24 }}
-            //         />
-            //     </TouchableOpacity>
-            // )
         })
     }, []);
 
@@ -107,9 +100,9 @@ export const GodyPass: FC<Props> = (props) => {
                         title="Get a pass"
                         type="primary"
                         onPress={onConfirmGodyPass}
-
                     />
                 </View>
+                <View style={{ width: constants.widthDevice - 40, height: 48 }} />
             </View>
             <BottomSheet
                 ref={bottomSheetModalRef}
@@ -117,7 +110,7 @@ export const GodyPass: FC<Props> = (props) => {
                 snapPoints={snapPoints}>
                 <BottomSheetScrollView
                     style={{ backgroundColor: colors.white }}
-                    contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 20, paddingBottom: 40 }}>
+                    contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 20, paddingBottom: 80 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <CustomText
                             text="GODY Pass"

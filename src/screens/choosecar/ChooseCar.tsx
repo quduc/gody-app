@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { RouteProp } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FC } from 'react';
 import { Alert } from 'react-native';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -17,6 +17,7 @@ import constants from '../../contants/contants';
 import { useStore } from '../../store/useStore';
 import { CarService, Location } from '../../types';
 import MapViewDirections from 'react-native-maps-directions';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
 
 
@@ -59,6 +60,8 @@ export const ChooseCar: FC<Props> = observer((props) => {
     const { booking } = store;
     const [service, setService] = useState<number>(1);
     const navigation = useNavigation<any>();
+    const bottomSheetModalRef = useRef<BottomSheet>(null);
+    const snapPoints = useMemo(() => ['55%', '100%'], []);
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("Search")} />
@@ -127,28 +130,36 @@ export const ChooseCar: FC<Props> = observer((props) => {
                     /> */}
                 </MapView>
             </View>
-            <View style={styles.search}>
-                <CustomText text="Chooose a trip or swipe up for more" t2 />
-                <View>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        {carServices.map((car: CarService) => {
-                            return (
-                                <CarServiceItem key={car.id} carService={car} />
-                            )
-                        })}
-                    </ScrollView>
-                    <CustomCardPayment
-                        cardInfo="*** 9999"
-                        iconRight={require('../../resources/images/forward.png')}
-                        iconLeft={require('../../resources/images/visa.png')}
-                        onPress={() => navigation.navigate("ChoosePayment")}
-                    />
-                    <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
-                        <CustomButton type="primary" title="Next" onPress={confirmPickup} />
-                    </View>
+            <BottomSheet
+                ref={bottomSheetModalRef}
+                index={0}
+                snapPoints={snapPoints}>
+                <BottomSheetScrollView contentContainerStyle={{
+                    paddingHorizontal: 20,
+                    paddingBottom: 20
+                }}>
+                    <CustomText text="Chooose a trip or swipe up for more" t2 />
+                    <View>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                            {carServices.map((car: CarService) => {
+                                return (
+                                    <CarServiceItem key={car.id} carService={car} />
+                                )
+                            })}
+                        </ScrollView>
+                        <CustomCardPayment
+                            cardInfo="*** 9999"
+                            iconRight={require('../../resources/images/forward.png')}
+                            iconLeft={require('../../resources/images/visa.png')}
+                            onPress={() => navigation.navigate("ChoosePayment")}
+                        />
+                        <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
+                            <CustomButton type="primary" title="Next" onPress={confirmPickup} />
+                        </View>
 
-                </View>
-            </View>
+                    </View>
+                </BottomSheetScrollView>
+            </BottomSheet>
         </View>
     )
 });
