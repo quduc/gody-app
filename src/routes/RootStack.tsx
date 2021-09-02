@@ -1,4 +1,4 @@
-import { CommonActions, NavigationContainer, useNavigation } from '@react-navigation/native';
+import { CommonActions, NavigationContainer } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { Image, StyleSheet, View } from 'react-native';

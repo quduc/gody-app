@@ -43,25 +43,32 @@ export const Search: FC<Props> = observer((props) => {
 
     const onGoToChooseCar = async () => {
         setLoading(true);
-        const response = await getDistanceAndTime(store.booking?.origin, store.booking?.destination);
-        if (response.status === 'OK') {
-            const totalFare = calculateFare(response.rows[0].elements[0].distance, response.rows[0].elements[0].duration);
-            store.saveBooking({
-                ...store.booking!,
-                distance: response.rows[0].elements[0].distance,
-                duration: response.rows[0].elements[0].duration,
-                fare: totalFare
-            })
-            navigation.navigate("ChooseCar");
-        } else {
-            Alert.alert(
-                "",
-                `${response.error_message}`,
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            )
-        }
+        // const response = await getDistanceAndTime(store.booking?.origin, store.booking?.destination);
+        // if (response.status === 'OK') {
+        //     const totalFare = calculateFare(response.rows[0].elements[0].distance, response.rows[0].elements[0].duration);
+        //     store.saveBooking({
+        //         ...store.booking!,
+        //         distance: response.rows[0].elements[0].distance,
+        //         duration: response.rows[0].elements[0].duration,
+        //         fare: totalFare
+        //     })
+        //     navigation.navigate("ChooseCar");
+        // } else {
+        //     Alert.alert(
+        //         "",
+        //         `${response.error_message}`,
+        //         [
+        //             { text: "OK", onPress: () => console.log("OK Pressed") }
+        //         ]
+        //     )
+        // }
+        store.saveBooking({
+            ...store.booking!,
+            distance: 17.800,
+            duration: 12000,
+            fare: 25
+        })
+        navigation.navigate("ChooseCar");
         setLoading(false);
     }
     return (
