@@ -1,11 +1,12 @@
-import { GoogleDistanceResponse } from './types';
+import { GoogleDistanceResponse, BaseResponse, ErrorResponse, Auth, ObjectResponse } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { Location } from './types';
 import constants from './contants/contants';
+import { Alert } from 'react-native';
 
 
-const BASE_URL = '';
+const BASE_URL = 'http://108.61.182.206:5000/api/';
 const GG_DISTANCE_API_URL = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 const TIMEOUT = 10000;
 
@@ -48,12 +49,41 @@ const del = async <T>(path: string, config?: AxiosRequestConfig): Promise<AxiosR
     return response;
 }
 
-//TODO: Type ErrorResponse
-const handleServerError = (error: AxiosError): any => {
-    console.log({ error });
+//handle server error base on https response status
+const handleServerError = (error: AxiosError): ErrorResponse => {
+    const { response } = error;
+    if (response && response.status >= 400) {
+        console.log(response);
+        if (response.data) {
+            Alert.alert(
+                "",
+                response.data.error,
+                [
+                    {
+                        text: "OK",
+                        style: "cancel"
+                    }
+                ]
+            );
+            return {
+                error: response.data.error || {},
+                __typename: 'ErrorResponse'
+            };
+        } else {
+            return {
+                error: {} as any,
+                __typename: 'ErrorResponse'
+            }
+        }
+    } else {
+        return {
+            error: 'Unhandled Error API',
+            __typename: 'ErrorResponse'
+        };
+    }
 }
 
-export const getDistanceAndTime = async (origin: Location | undefined, destination: Location | undefined): Promise<GoogleDistanceResponse> => {
+export const getDistanceAndTime = async (origin: Location | undefined, destination: Location | undefined): Promise<GoogleDistanceResponse | ErrorResponse> => {
     try {
         const response = await get<GoogleDistanceResponse>(GG_DISTANCE_API_URL,
             {
@@ -68,4 +98,15 @@ export const getDistanceAndTime = async (origin: Location | undefined, destinati
     } catch (error: any) {
         return handleServerError(error);
     }
+}
+
+export const loginApp = async (phone: string, password: string): Promise<ObjectResponse<Auth> | ErrorResponse> => {
+    try {
+        const response = await post<ObjectResponse<Auth>>('public/user/login', { phone, password });
+        AsyncStorage.setItem('token', response.data.result.token);
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+
 }

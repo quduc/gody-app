@@ -1,7 +1,6 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { CommonActions, NavigationContainer, useNavigation } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
-import { Home } from '../screens/home/Home';
 import { Image, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import { CustomText as Text } from '../components/CustomText';
@@ -9,11 +8,7 @@ import { colors } from '../contants/colors';
 import FastImage from 'react-native-fast-image';
 import constants from '../contants/contants';
 import { DrawerItemProps } from '../types';
-import { Search } from '../screens/search/Search';
-import { ChooseCar } from '../screens/choosecar/ChooseCar';
 import { GodyPass } from '../screens/godypass/GodyPass';
-import { ChoosePayment } from '../screens/choosepayment/ChoosePayment';
-import { AddPayment } from '../screens/addpayment/AddPayment';
 import { Settings } from '../screens/settings/Settings';
 import { FreeTrips } from '../screens/freetrips/FreeTrips';
 import { EditAccount } from '../screens/editaccount/EditAccount';
@@ -23,6 +18,9 @@ import { Top } from '../screens/top/Top';
 import { SignUp } from '../screens/signup/SignUp';
 import { VerifyCode } from '../screens/verifycode/VerifyCode';
 import { BookingStack } from './BookingStack';
+import { observer } from 'mobx-react';
+import { useStore } from '../store/useStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -70,11 +68,18 @@ const drawerItems: DrawerItemProps[] = [
         "icon": require('../resources/images/settings.png')
     },
 ]
-export const RootStack: FC<Props> = () => {
-
-
-
+export const RootStack: FC<Props> = observer(() => {
+    const store = useStore();
     const CustomDrawerContent = (props: any) => {
+        const onLogout = async () => {
+            await AsyncStorage.removeItem('token');
+            props.navigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'Top' }],
+                }),
+            );
+        }
         const DrawerItem = ({ item }: DrawerItemProps | any) => {
             return (
                 <TouchableOpacity
@@ -109,7 +114,9 @@ export const RootStack: FC<Props> = () => {
                     {drawerItems.map((item: DrawerItemProps) => <DrawerItem key={item.id} item={item} />)}
                 </View>
                 <View style={styles.signOut}>
-                    <TouchableOpacity style={styles.row}>
+                    <TouchableOpacity
+                        onPress={onLogout}
+                        style={styles.row}>
                         <FastImage
                             source={require('../resources/images/sign-out.png')}
                             style={styles.icon}
@@ -125,7 +132,7 @@ export const RootStack: FC<Props> = () => {
         <NavigationContainer>
             <Drawer.Navigator
                 drawerContent={props => <CustomDrawerContent {...props} />}
-                initialRouteName="BookingStack"
+                initialRouteName={store.auth?.token ? 'BookingStack' : 'Top'}
                 screenOptions={({ navigation }) => ({
                     headerLeftContainerStyle: { paddingLeft: 20 },
                     headerStyle: { shadowColor: 'transparent' },
@@ -207,7 +214,7 @@ export const RootStack: FC<Props> = () => {
             </Drawer.Navigator>
         </NavigationContainer>
     );
-};
+});
 const styles = StyleSheet.create({
     icon: {
         width: 24,

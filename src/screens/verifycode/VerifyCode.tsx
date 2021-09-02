@@ -60,7 +60,7 @@ export const VerifyCode: FC<Props> = ({ route: { params: { phoneNumber } } }) =>
             <CustomButton
                 type="primary"
                 title="Submit"
-                onPress={() => navigation.navigate("BookingStack")}
+                onPress={() => navigation.navigate("MainStack")}
             />
         </CustomBackground>
     )

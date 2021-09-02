@@ -12,7 +12,6 @@ import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
-
 interface Props { }
 export const ChoosePayment: FC<Props> = observer((props) => {
 

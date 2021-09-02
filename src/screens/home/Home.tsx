@@ -13,6 +13,7 @@ import FastImage from 'react-native-fast-image';
 import Geolocation from '@react-native-community/geolocation';
 import { observer } from 'mobx-react';
 import { useStore } from '../../store/useStore';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 
 LogBox.ignoreLogs(['ReactNativeFiberHostComponent']);
 LogBox.ignoreLogs(['Mapbox warning Falling back']);
@@ -26,8 +27,8 @@ interface Props {
 //TODO: set dummy origin location
 const originDummy = {
     "location": {
-        "lat": 16.6077752,
-        "lng": 106.6043628
+        "lat": 16.6131186,
+        "lng": 106.5982646
     },
     "description": "31 Lê Quý Đôn, An Hà, Lao Bảo, Hướng Hóa, Quảng Trị"
 }
@@ -45,18 +46,8 @@ export const Home: FC<Props> = observer((props) => {
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: true,
-            headerLeft: () => (
-                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.openDrawer()}>
-                    <Image source={require('../../resources/images/list.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
-            )
+            headerLeft: () => <CustomHeaderLeft type="openDrawer" onPress={() => navigation.openDrawer()} />
         });
-        Geolocation.getCurrentPosition(info => setUserLocation({
-            longitude: info.coords.longitude,
-            latitude: info.coords.latitude
-        }));
     }, [])
 
 
@@ -85,12 +76,7 @@ export const Home: FC<Props> = observer((props) => {
                             key='origin'
                             coordinate={{ latitude: origin.location.lat, longitude: origin.location.lng }}
 
-                        >
-                            <FastImage
-                                source={require('../../resources/images/car_map.png')}
-                                style={{ width: 16, height: 32 }}
-                            />
-                        </Marker>
+                        />
                     }
                 </MapView>
             </View>
@@ -184,5 +170,11 @@ const styles = StyleSheet.create({
         top: constants.heightDevice / 2 - 100,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    originLocation: {
+        width: 20,
+        height: 20,
+        borderRadius: 20,
+        backgroundColor: colors.primary1
     }
 });
