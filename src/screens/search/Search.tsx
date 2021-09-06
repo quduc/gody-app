@@ -62,13 +62,24 @@ export const Search: FC<Props> = observer((props) => {
         //         ]
         //     )
         // }
+
+
+        //dummy 
         store.saveBooking({
             ...store.booking!,
-            distance: 17.800,
-            duration: 12000,
+            distance: {
+                value: 17.800,
+                text: '17kms'
+            },
+            duration: {
+                value: 12000,
+                text: '12m',
+            },
             fare: 25
         })
-        navigation.navigate("ChooseCar");
+        navigation.navigate("ChooseCar", {
+            defaultFare: store.booking?.fare
+        });
         setLoading(false);
     }
     return (

@@ -1,4 +1,4 @@
-import { GoogleDistanceResponse, BaseResponse, ErrorResponse, Auth, ObjectResponse } from './types';
+import { GoogleDistanceResponse, BaseResponse, ErrorResponse, Auth, ObjectResponse, Booking } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { Location } from './types';
@@ -18,7 +18,7 @@ const godyClient = axios.create({
 
 //intercept requests or responses before they are handled
 godyClient.interceptors.request.use(async (config: any) => {
-    const token = await AsyncStorage.getItem('access_token');
+    const token = await AsyncStorage.getItem('token');
     if (token && token !== '') {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -108,5 +108,13 @@ export const loginApp = async (phone: string, password: string): Promise<ObjectR
     } catch (error: any) {
         return handleServerError(error);
     }
+}
 
+export const findNearByDriver = async (booking: Booking | undefined): Promise<ObjectResponse<Booking> | ErrorResponse> => {
+    try {
+        const response = await post<ObjectResponse<Booking>>('private/user/findNearByDriver', { booking })
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
 }

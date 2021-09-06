@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { LogBox, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-import constants from '../../contants/contants';
+import constants, { carServices } from '../../contants/contants';
 import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesInput } from '../../components/GooglePlacesInput';
@@ -14,6 +14,7 @@ import Geolocation from '@react-native-community/geolocation';
 import { observer } from 'mobx-react';
 import { useStore } from '../../store/useStore';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
+import { MapContainer } from '../mapcontainer/MapContainer';
 
 LogBox.ignoreLogs(['ReactNativeFiberHostComponent']);
 LogBox.ignoreLogs(['Mapbox warning Falling back']);
@@ -41,7 +42,9 @@ export const Home: FC<Props> = observer((props) => {
     const store = useStore();
     const { booking } = store;
     store.saveBooking({
-        ...booking!, origin
+        ...booking!,
+        origin: origin,
+        car_service: carServices[0] //godyX,
     })
     useEffect(() => {
         navigation.setOptions({
@@ -61,24 +64,9 @@ export const Home: FC<Props> = observer((props) => {
     return (
         <View style={styles.container} >
             <View style={styles.map}>
-                <MapView
-                    provider={PROVIDER_GOOGLE}
-                    style={StyleSheet.absoluteFillObject}
-                    initialRegion={{
-                        latitude: originDummy.location.lat,
-                        longitude: originDummy.location.lng,
-                        latitudeDelta: 0.008922,
-                        longitudeDelta: 0.008421,
-                    }}
-                >
-                    {origin &&
-                        <Marker
-                            key='origin'
-                            coordinate={{ latitude: origin.location.lat, longitude: origin.location.lng }}
-
-                        />
-                    }
-                </MapView>
+                <MapContainer
+                    origin={origin}
+                />
             </View>
             <View style={styles.search}>
                 <GooglePlacesInput

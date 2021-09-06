@@ -3,79 +3,57 @@ import { RouteProp } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FC } from 'react';
-import { Alert } from 'react-native';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { getDistanceAndTime } from '../../API';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomCardPayment } from '../../components/CustomCardPayment';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
-import constants from '../../contants/contants';
+import constants, { carServices } from '../../contants/contants';
 import { useStore } from '../../store/useStore';
 import { CarService, Location } from '../../types';
-import MapViewDirections from 'react-native-maps-directions';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { MapContainer } from '../mapcontainer/MapContainer';
 
 
+interface Props {
+    route: RouteProp<{ params: { defaultFare: number } }, 'params'>
+}
+export const ChooseCar: FC<Props> = observer(({ route: { params: { defaultFare } } }) => {
 
-const carServices: CarService[] = [
-    {
-        "id": 1,
-        "type": 1,
-        "name": "GodyX",
-        "description": "Affordable rides, all to yourself",
-        "image": require('../../resources/images/godyX.png'),
-        "price": 25,
-        "seats": 4,
-        "time": "1-4 min"
-    },
-    {
-        "id": 2,
-        "type": 2,
-        "name": "GodyPremium",
-        "description": "Affordable rides, all to yourself",
-        "image": require('../../resources/images/godyPremium.png'),
-        "price": 35,
-        "seats": 4,
-        "time": "1-4 min"
-    },
-    {
-        "id": 3,
-        "type": 3,
-        "name": "GodyLuxury",
-        "description": "Affordable rides, all to yourself",
-        "image": require('../../resources/images/godyLuxury.png'),
-        "price": 25,
-        "seats": 4,
-        "time": "1-4 min"
-    }
-]
-
-interface Props { }
-export const ChooseCar: FC<Props> = observer((props) => {
     const store = useStore();
     const { booking } = store;
-    const [service, setService] = useState<number>(1);
+    const [service, setService] = useState<number>(booking?.car_service.id ?? 1);
     const navigation = useNavigation<any>();
     const bottomSheetModalRef = useRef<BottomSheet>(null);
-    const snapPoints = useMemo(() => ['55%', '100%'], []);
+    const snapPoints = useMemo(() => ['55%', '75%'], []);
+
+    // const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
+
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("Search")} />
         })
     }, [])
 
-    const confirmPickup = () => {
-
+    const onChooseCarService = (carServiceID: number) => {
+        store.saveBooking({
+            ...booking!,
+            car_service: carServices[carServiceID - 1],
+            fare: carServiceID === 1 ? defaultFare : carServiceID === 2 ? defaultFare * 1.5 : defaultFare * 2
+        })
+        setService(carServiceID);
     }
-
+    const confirmPickup = () => {
+        //TODO: find nearby driver before navigate
+        navigation.navigate("ConfirmBooking");
+    }
     const CarServiceItem = ({ carService }: any) => {
         return (
             <TouchableOpacity
-                onPress={() => setService(carService.id)}
+                onPress={() => onChooseCarService(carService.id)}
                 style={service === carService.id ? styles.carServiceItemActive : styles.carServiceItem}
             >
                 <FastImage
@@ -100,64 +78,57 @@ export const ChooseCar: FC<Props> = observer((props) => {
                 </View>
                 <CustomText text={carService.description} s style={{ marginTop: 10, color: colors.neutral2, textAlign: 'center' }} />
                 <CustomText
-                    text={`${carService.type === 1 ? booking?.fare
-                        : carService.type === 2 ? booking?.fare && booking?.fare * 1.5
-                            : booking?.fare && booking?.fare * 2
+                    text={`${carService.type === 1 ? defaultFare
+                        : carService.type === 2 ? defaultFare * 1.5
+                            : defaultFare * 2
                         }$`}
                     t1
                     style={{ marginTop: 15, color: colors.primary1, textAlign: 'center' }} />
             </TouchableOpacity>
         )
     }
+    const ChooseCarService = () => {
+        return (
+            <View>
+                <CustomText text="Chooose a trip or swipe up for more" t2 />
+                <View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {carServices.map((car: CarService) => {
+                            return (
+                                <CarServiceItem key={car.id} carService={car} />
+                            )
+                        })}
+                    </ScrollView>
+                    <CustomCardPayment
+                        cardInfo="*** 9999"
+                        iconRight={require('../../resources/images/forward.png')}
+                        iconLeft={require('../../resources/images/visa.png')}
+                        onPress={() => navigation.navigate("ChoosePayment")}
+                    />
+                    <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
+                        <CustomButton type="primary" title="Next" onPress={confirmPickup} />
+                    </View>
+
+                </View>
+            </View>
+        )
+    }
     return (
         <View style={styles.container}>
             <View style={styles.map}>
-                <MapView
-                    provider={PROVIDER_GOOGLE}
-                    maxZoomLevel={16}
-                    style={StyleSheet.absoluteFillObject}
-                    initialRegion={{
-                        latitude: store.booking?.origin.location.lat ?? 16.6328871,
-                        longitude: store.booking?.origin.location.lng ?? 106.7383723,
-                        latitudeDelta: 0.008922,
-                        longitudeDelta: 0.008421,
-                    }}
-                >
-                    {/* <MapViewDirections
-                        origin={{ latitude: booking?.origin.location.lat ?? 16.6328871, longitude: booking?.origin.location.lng ?? 106.7383723 }}
-                        destination={{ latitude: booking?.destination.location.lat ?? 16.6328871, longitude: booking?.destination.location.lng ?? 106.7383723 }}
-                        apikey={constants.directionKeyAPI}
-                    /> */}
-                </MapView>
+                <MapContainer />
             </View>
             <BottomSheet
                 ref={bottomSheetModalRef}
                 index={0}
+                // onChange={() => setIsOpenFullModal(!isOpenFullModal)}
                 snapPoints={snapPoints}>
                 <BottomSheetScrollView contentContainerStyle={{
                     paddingHorizontal: 20,
-                    paddingBottom: 20
+                    paddingBottom: 20,
                 }}>
-                    <CustomText text="Chooose a trip or swipe up for more" t2 />
-                    <View>
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                            {carServices.map((car: CarService) => {
-                                return (
-                                    <CarServiceItem key={car.id} carService={car} />
-                                )
-                            })}
-                        </ScrollView>
-                        <CustomCardPayment
-                            cardInfo="*** 9999"
-                            iconRight={require('../../resources/images/forward.png')}
-                            iconLeft={require('../../resources/images/visa.png')}
-                            onPress={() => navigation.navigate("ChoosePayment")}
-                        />
-                        <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
-                            <CustomButton type="primary" title="Next" onPress={confirmPickup} />
-                        </View>
+                    <ChooseCarService />
 
-                    </View>
                 </BottomSheetScrollView>
             </BottomSheet>
         </View>

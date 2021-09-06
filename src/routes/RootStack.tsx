@@ -21,6 +21,7 @@ import { BookingStack } from './BookingStack';
 import { observer } from 'mobx-react';
 import { useStore } from '../store/useStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PrivacySettings from '../screens/privacy-settings/PrivacySettings';
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -179,8 +180,6 @@ export const RootStack: FC<Props> = observer(() => {
                     options={{
                         headerShown: false
                     }} />
-
-
                 <Drawer.Screen
                     name="GodyPass"
                     component={GodyPass}
@@ -210,6 +209,12 @@ export const RootStack: FC<Props> = observer(() => {
                     component={UpdateUserInfo}
                     options={{
                         headerTitle: "Edit account",
+                    }} />
+                <Drawer.Screen
+                    name="PrivacySettings"
+                    component={PrivacySettings}
+                    options={{
+                        headerTitle: "Privacy Settings",
                     }} />
             </Drawer.Navigator>
         </NavigationContainer>

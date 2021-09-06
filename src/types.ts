@@ -74,3 +74,7 @@ export interface ErrorResponse {
     error: string;
 };
 
+//user default payment
+export interface DefaulPayment {
+    type: number; // 1: gody cash, 2: card
+}
