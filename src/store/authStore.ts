@@ -9,7 +9,7 @@ export class AuthStore {
     @observable userLocation?: Location;
 
     @observable booking?: Booking;
-
+    @observable defaultPayment?: any;
 
     @action
     saveAuth(auth: Auth) {

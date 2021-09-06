@@ -3,8 +3,10 @@ import React from 'react';
 import { AddPayment } from '../screens/addpayment/AddPayment';
 import { ChooseCar } from '../screens/choosecar/ChooseCar';
 import { ChoosePayment } from '../screens/choosepayment/ChoosePayment';
+import { ConfirmBooking } from '../screens/confirmbooking/ConfirmBooking';
 import { Home } from '../screens/home/Home';
 import { Search } from '../screens/search/Search';
+import { UpComingTrip } from '../screens/upcomingtrip/UpComingTrip';
 
 const Stack = createStackNavigator();
 
@@ -46,6 +48,18 @@ export const BookingStack = () => {
                 component={AddPayment}
                 options={{
                     headerTitle: "Add payment",
+                }} />
+            <Stack.Screen
+                name="ConfirmBooking"
+                component={ConfirmBooking}
+                options={{
+                    headerTitle: "",
+                }} />
+            <Stack.Screen
+                name="UpComingTrip"
+                component={UpComingTrip}
+                options={{
+                    headerTitle: "",
                 }} />
         </Stack.Navigator>
     )

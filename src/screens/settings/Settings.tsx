@@ -50,6 +50,7 @@ export const Settings: FC = () => {
             <CustomText text="Other" t2 style={{ color: colors.neutral2, marginVertical: 10 }} />
 
             <CustomButton
+                onPress={() => navigation.navigate("PrivacySettings")}
                 leftIcon={require('../../resources/images/settings.png')}
                 rightIcon={require('../../resources/images/forward.png')}
                 type="light"

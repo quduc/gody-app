@@ -7,7 +7,7 @@ import { CustomText } from './CustomText';
 
 interface Props {
     icon: any;
-    text: string;
+    text?: string;
 }
 
 export const CustomTextFieldWithIcon: FC<Props> = (props) => {
@@ -16,9 +16,9 @@ export const CustomTextFieldWithIcon: FC<Props> = (props) => {
             <FastImage
                 source={props.icon}
                 style={{ width: 20, height: 20 }}
-                tintColor={colors.neutral3}
+                tintColor={colors.primary1}
             />
-            <CustomText p1 text={props.text} style={{ marginLeft: 10, color: colors.neutral1 }} />
+            <CustomText p2 text={props.text} style={{ marginLeft: 10, color: colors.neutral1 }} />
         </View>
     )
 }

@@ -12,10 +12,13 @@ import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
+import { useStore } from '../../store/useStore';
 interface Props { }
 export const ChoosePayment: FC<Props> = observer((props) => {
 
     const navigation = useNavigation<any>();
+    const store = useStore();
+    const { booking } = store;
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
