@@ -3,14 +3,20 @@ import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { CustomBackground } from '../../components/CustomBackground';
+import { CustomButton } from '../../components/CustomButton';
 import { CustomText } from '../../components/CustomText';
+import { CustomTextFieldWithIcon } from '../../components/CustomTextFiledWithIcon';
 import { colors } from '../../contants/colors';
+import { Location } from '../../types';
 
 interface Props {
     isOpenFullModal?: boolean;
+    origin?: Location;
+    destination?: Location;
+    fare?: number;
 }
 export const BookingDetail: FC<Props> = (props) => {
-    const { isOpenFullModal } = props;
+    const { isOpenFullModal, origin, destination, fare } = props;
     return (
         <CustomBackground>
             {isOpenFullModal && <View style={{ height: 50 }} />}
@@ -62,8 +68,34 @@ export const BookingDetail: FC<Props> = (props) => {
             </View>
             <View style={styles.devider} />
             <View style={styles.fare}>
-
+                <CustomText
+                    t2
+                    style={{ color: colors.neutral1 }}
+                    text="Trip detail"
+                />
+                <CustomTextFieldWithIcon
+                    icon={require('../../resources/images/home.png')}
+                    text={origin?.description}
+                />
+                <CustomTextFieldWithIcon
+                    icon={require('../../resources/images/marker.png')}
+                    text={destination?.description}
+                />
+                <CustomTextFieldWithIcon
+                    icon={require('../../resources/images/payment.png')}
+                    text={`${fare}$`}
+                    textBold
+                />
+                <CustomTextFieldWithIcon
+                    icon={require('../../resources/images/godypass.png')}
+                    text={`GODY15`}
+                    textBold
+                />
             </View>
+            <CustomButton
+                type="primary"
+                title="Cancel booking"
+            />
         </CustomBackground>
     )
 }
@@ -91,6 +123,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.neutral3
     },
     fare: {
-
+        paddingVertical: 20
     }
 })
