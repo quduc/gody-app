@@ -79,6 +79,9 @@ export const UpComingTrip: FC<Props> = observer(() => {
                     {!finding && (
                         <BookingDetail
                             isOpenFullModal={isOpenFullModal}
+                            origin={booking?.origin}
+                            destination={booking?.destination}
+                            fare={booking?.fare}
                         />
                     )}
                 </BottomSheetScrollView>

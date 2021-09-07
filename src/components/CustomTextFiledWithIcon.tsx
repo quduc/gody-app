@@ -1,13 +1,14 @@
 import React from 'react';
 import { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { colors } from '../contants/colors';
 import { CustomText } from './CustomText';
 
 interface Props {
     icon: any;
-    text?: string;
+    text?: string | number;
+    textBold?: boolean;
 }
 
 export const CustomTextFieldWithIcon: FC<Props> = (props) => {
@@ -18,7 +19,12 @@ export const CustomTextFieldWithIcon: FC<Props> = (props) => {
                 style={{ width: 20, height: 20 }}
                 tintColor={colors.primary1}
             />
-            <CustomText p2 text={props.text} style={{ marginLeft: 10, color: colors.neutral1 }} />
+            {props.textBold ? (
+                <CustomText t2 text={props.text} style={{ marginLeft: 10, color: colors.neutral1 }} />
+            ) : (
+                <CustomText p2 text={props.text} style={{ marginLeft: 10, color: colors.neutral1 }} />
+            )}
+
         </View>
     )
 }
@@ -28,8 +34,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomColor: colors.neutral4,
         borderBottomWidth: 1,
-        marginVertical: 10,
-        height: 64,
+        marginVertical: 5,
+        height: 60,
         alignItems: 'center'
     }
 })
