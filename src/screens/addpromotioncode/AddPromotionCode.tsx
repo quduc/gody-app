@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View, TextInput, FlatList, ListRenderItem } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, TextInput, FlatList } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { CustomBackground } from '../../components/CustomBackground';
@@ -48,24 +48,25 @@ export const AddPromotionCode: FC = () => {
       }, 500);
    }
 
-
-   const promoteItem: any = ({ item }: { item: IPromotionCodeItem }) => {
-      <View style={styles.promoteCode}>
-         <FastImage
-            style={{ width: 30, height: 24 }}
-            source={require('../../resources/images/gift.png')}
-         />
-         <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-         }}>
-            {/* config and display the fee number */}
-            <CustomText text={item.promoteCode} t3 style={{ color: colors.neutral2 }} />
-            <CustomText text={`- ${item.fee}đ`} t3 style={{ color: colors.neutral2 }} />
+   const promoteItem: any = ({ item }: { item: IPromotionCodeItem }) => (
+      <TouchableOpacity style={styles.promoteCode}
+         onPress={() => selectCode(item)}
+      >
+         <View style={styles.iconContainer}>
+            <FastImage
+               style={{ width: 26, height: 26, marginRight: 20 }}
+               source={require('../../resources/images/godypass.png')}
+               resizeMode={FastImage.resizeMode.center}
+               tintColor={colors.primary1}
+            />
          </View>
-      </View>
-   };
+         <View style={styles.feeContainer}>
+            {/* config and display the fee number */}
+            <CustomText text={item.promoteCode} t2 style={{ color: colors.neutral2 }} />
+            <CustomText text={`${item.fee}đ`} t2 style={styles.feeText} />
+         </View>
+      </TouchableOpacity>
+   )
 
    return (
       <CustomBackground>
@@ -83,77 +84,25 @@ export const AddPromotionCode: FC = () => {
             <TextInput
                placeholder="PROMOTION CODE"
                value={code}
-               style={{
-                  color: colors.neutral1,
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  borderLeftWidth: 1,
-                  borderColor: colors.neutral2,
-                  paddingHorizontal: 10,
-                  paddingLeft: 20,
-               }}
+               style={styles.inputCode}
             />
          </View>
 
-         <View style={{
-            height: constants.heightDevice * 0.65,
-            borderColor: colors.neutral3,
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            paddingVertical: 5
-         }}>
+         <View style={styles.listCodes}>
             <FlatList<IPromotionCodeItem>
                keyExtractor={(item: IPromotionCodeItem) => item.id.toString()}
                data={promotionCode}
                maxToRenderPerBatch={4}
-               renderItem={({ item }: { item: IPromotionCodeItem }) => (
-                  <TouchableOpacity style={styles.promoteCode}
-                     onPress={() => selectCode(item)}
-                  >
-                     <View style={{
-                        flex: 1,
-                        paddingTop: 5,
-                        transform: [
-                           { rotateZ: "14deg" },
-                           // { scale: 1 }
-                        ]
-                     }}>
-                        <FastImage
-                           style={{ width: 26, height: 26, marginRight: 20 }}
-                           source={require('../../resources/images/godypass.png')}
-                           resizeMode={FastImage.resizeMode.center}
-                           tintColor={colors.primary1}
-                        />
-                     </View>
-
-                     <View style={{
-                        flex: 6,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                     }}>
-                        {/* config and display the fee number */}
-                        <CustomText text={item.promoteCode} t2 style={{
-                           color: colors.neutral2
-                        }} />
-                        <CustomText text={`${item.fee}đ`} t2 style={{
-                           color: colors.neutral1,
-                           paddingRight: 30,
-                           fontSize: 19,
-                           fontWeight: 'bold',
-                           lineHeight: 20,
-                        }} />
-                     </View>
-                  </TouchableOpacity>
-               )}
-
+               renderItem={promoteItem}
             />
          </View>
 
-         <CustomButton
-            title="Confirm"
-            type="primary"
-         />
+         <View style={styles.btnContainer}>
+            <CustomButton
+               title="Get a pass"
+               type="primary"
+            />
+         </View>
 
       </CustomBackground>
 
@@ -161,6 +110,14 @@ export const AddPromotionCode: FC = () => {
 }
 
 const styles = StyleSheet.create({
+   iconContainer: {
+      flex: 1,
+      paddingTop: 5,
+      transform: [
+         { rotateZ: "14deg" },
+         // { scale: 1 }
+      ]
+   },
    promoteCode: {
       flexDirection: 'row',
       paddingHorizontal: 20,
@@ -170,5 +127,42 @@ const styles = StyleSheet.create({
       height: 45,
       borderRadius: 12,
       alignItems: 'center'
+   },
+   feeContainer: {
+      flex: 6,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+   },
+   listCodes: {
+      height: constants.heightDevice * 0.65,
+      borderColor: colors.neutral3,
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      paddingVertical: 5
+   },
+   inputCode: {
+      color: colors.neutral1,
+      fontSize: 18,
+      fontWeight: 'bold',
+      borderLeftWidth: 1,
+      borderColor: colors.neutral2,
+      paddingHorizontal: 10,
+      paddingLeft: 20,
+   },
+   btnContainer: {
+      width: constants.widthDevice / 2,
+      height: 45,
+      flex: 1,
+      justifyContent: 'flex-end',
+      marginBottom: 20,
+   },
+   feeText: {
+      color: colors.neutral1,
+      paddingRight: 30,
+      fontSize: 19,
+      fontWeight: 'bold',
+      lineHeight: 20,
    }
+
 });

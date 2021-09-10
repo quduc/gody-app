@@ -38,11 +38,11 @@ export const AddFund: FC<IAddFundProps> = (props) => {
          </View>
 
          <ScrollView style={{ flex: 1, marginTop: 10 }}>
-            <PriceListItem tripCost={10000} carImage={require('./car1.png')} />
+            <PriceListItem tripCost={10000} carImage={require('../../resources/images/car1.png')} />
 
-            <PriceListItem tripCost={15000} tripCost_promotion={13000} carImage={require('./car2.png')} />
+            <PriceListItem tripCost={15000} tripCost_promotion={13000} carImage={require('../../resources/images/car2.png')} />
 
-            <PriceListItem tripCost={25000} tripCost_promotion={18000} carImage={require('./car3.png')} />
+            <PriceListItem tripCost={25000} tripCost_promotion={18000} carImage={require('../../resources/images/car3.png')} />
          </ScrollView>
       </CustomBackground >
    )
@@ -52,7 +52,6 @@ interface IPriceListItemProps {
    tripCost: number;
    tripCost_promotion?: number;
    carImage: any;
-
 }
 const PriceListItem: FC<IPriceListItemProps> = ({ tripCost, tripCost_promotion, carImage }) => {
 
@@ -76,14 +75,9 @@ const PriceListItem: FC<IPriceListItemProps> = ({ tripCost, tripCost_promotion, 
             {/* trip cost */}
             <View style={[styles.tripInfo]}>
                <CustomText text="You'll pay:" p2 style={{ color: colors.black }} />
-               {tripCost_promotion != null ? (
+               {tripCost_promotion ? (
                   <>
-                     <CustomText text={tripCost + " đ"} t2 style={{
-                        color: colors.neutral2,
-                        textDecorationLine: "line-through",
-                        textDecorationColor: colors.neutral2,
-                        marginVertical: 3
-                     }} />
+                     <CustomText text={tripCost + " đ"} t2 style={styles.promotionCost} />
                      <CustomText text={tripCost_promotion + " đ"} t2 style={{ color: colors.primary1 }} />
                   </>
                ) : (
@@ -99,7 +93,7 @@ const PriceListItem: FC<IPriceListItemProps> = ({ tripCost, tripCost_promotion, 
                alignItems: 'center'
             }}>
                <FastImage
-                  style={{ width: 120, height: 60, transform: [{ scale: 1.2 }] }}
+                  style={styles.carImgStyle}
                   source={carImage}
                   resizeMode="cover"
                />
@@ -160,4 +154,15 @@ const styles = StyleSheet.create({
       marginVertical: 5
    },
 
+   carImgStyle: {
+      width: 120,
+      height: 60,
+      transform: [{ scale: 1.2 }]
+   },
+   promotionCost: {
+      color: colors.neutral2,
+      textDecorationLine: "line-through",
+      textDecorationColor: colors.neutral2,
+      marginVertical: 3
+   },
 });
