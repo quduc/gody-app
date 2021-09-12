@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react';
 import React from 'react';
 import { FC } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -8,22 +9,24 @@ import { CustomButton } from '../../components/CustomButton';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
+import { useStore } from '../../store/useStore';
 
-export const Settings: FC = () => {
+export const Settings: FC = observer(() => {
     const navigation = useNavigation<any>();
+    const { user } = useStore()
     return (
         <CustomBackground>
             <TouchableOpacity style={styles.user_info} onPress={() => navigation.navigate("EditAccount")}>
                 <View style={{ flexDirection: 'row' }}>
                     <FastImage
                         style={{ width: 56, height: 56, borderRadius: 56 }}
-                        source={require('../../resources/images/Avatar.png')}
+                        source={user?.profileImage ? { uri: user.profileImage } : require('../../resources/images/Avatar.png')}
                         resizeMode="cover"
                     />
                     <View style={{ marginLeft: 10 }}>
-                        <CustomText t2 text="Push Puttichai" style={{ color: colors.neutral1 }} />
-                        <CustomText s text="0988 999 888" style={{ color: colors.neutral2, marginVertical: 5 }} />
-                        <CustomText t2 text="nqduc74@gmail.com" style={{ color: colors.neutral2, fontSize: 14 }} />
+                        <CustomText t2 text={user?.name} style={{ color: colors.neutral1 }} />
+                        <CustomText s text={user?.phone} style={{ color: colors.neutral2, marginVertical: 5 }} />
+                        <CustomText t2 text={user?.email} style={{ color: colors.neutral2, fontSize: 14 }} />
                     </View>
                 </View>
                 <FastImage
@@ -71,7 +74,7 @@ export const Settings: FC = () => {
 
         </CustomBackground>
     )
-}
+});
 
 const styles = StyleSheet.create({
     user_info: {

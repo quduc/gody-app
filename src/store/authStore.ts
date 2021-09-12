@@ -1,5 +1,5 @@
 import { action, observable } from "mobx";
-import { Auth, Booking, Location } from "../types";
+import { Auth, Booking, Location, User } from "../types";
 
 //observable defines a trackable field that stores the state.
 //action marks a method as action that will modify the state.
@@ -7,13 +7,18 @@ import { Auth, Booking, Location } from "../types";
 export class AuthStore {
     @observable auth?: Auth;
     @observable userLocation?: Location;
-
+    @observable user?: User;
     @observable booking?: Booking;
     @observable defaultPayment?: any;
 
     @action
     saveAuth(auth: Auth) {
         this.auth = auth;
+    }
+
+    @action
+    saveUser(user: User) {
+        this.user = user;
     }
 
     @action
@@ -26,11 +31,11 @@ export class AuthStore {
     }
 
 
-
     @action
     reset() {
         this.auth = undefined;
         this.userLocation = undefined;
         this.booking = undefined;
+        this.user = undefined;
     }
 }

@@ -1,4 +1,4 @@
-import { GoogleDistanceResponse, BaseResponse, ErrorResponse, Auth, ObjectResponse, Booking } from './types';
+import { GoogleDistanceResponse, BaseResponse, ErrorResponse, Auth, ObjectResponse, Booking, User } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { Location } from './types';
@@ -40,6 +40,12 @@ const get = async <T>(path: string, config?: AxiosRequestConfig): Promise<AxiosR
 const patch = async <T>(path: string, data: any): Promise<AxiosResponse> => {
     console.log({ path, method: 'PATCH', params: data });
     const response = await godyClient.patch<T>(path, data);
+    return response;
+}
+
+const put = async <T>(path: string, data: any): Promise<AxiosResponse> => {
+    console.log({ path, method: 'PUT', params: data });
+    const response = await godyClient.put<T>(path, data);
     return response;
 }
 
@@ -113,6 +119,26 @@ export const loginApp = async (phone: string, password: string): Promise<ObjectR
 export const findNearByDriver = async (booking: Booking | undefined): Promise<ObjectResponse<Booking> | ErrorResponse> => {
     try {
         const response = await post<ObjectResponse<Booking>>('private/user/findNearByDriver', { booking })
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const getMe = async (): Promise<ObjectResponse<User> | ErrorResponse> => {
+    try {
+        const response = await get<ObjectResponse<User>>('private/user/me');
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const updateProfile = async (field: string, value: string, _id: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await put<BaseResponse>(`private/user/${_id}`, {
+            [field]: value
+        });
         return response.data;
     } catch (error: any) {
         return handleServerError(error);
