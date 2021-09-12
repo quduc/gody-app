@@ -71,6 +71,7 @@ const drawerItems: DrawerItemProps[] = [
 ]
 export const RootStack: FC<Props> = observer(() => {
     const store = useStore();
+    const { user } = store;
     const CustomDrawerContent = (props: any) => {
         const onLogout = async () => {
             await AsyncStorage.removeItem('token');
@@ -102,12 +103,12 @@ export const RootStack: FC<Props> = observer(() => {
                     style={styles.userInfo}>
                     <View style={styles.row}>
                         <View>
-                            <Text text="Push Puttichai" t2 style={{ marginVertical: 5 }} />
-                            <Text text="0989 999 999" s style={{ color: colors.neutral2 }} />
+                            <Text text={user?.name} t2 style={{ marginVertical: 5 }} />
+                            <Text text={user?.phone} s style={{ color: colors.neutral2 }} />
                         </View>
                         <FastImage
                             style={styles.avatar}
-                            source={require('../resources/images/Avatar.png')}
+                            source={user?.profileImage ? { uri: user.profileImage } : require('../resources/images/Avatar.png')}
                         />
                     </View>
                 </TouchableOpacity>

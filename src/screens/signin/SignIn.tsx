@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { loginApp } from '../../API';
+import { getMe, loginApp } from '../../API';
 import { CustomBackground } from '../../components/CustomBackground';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
@@ -29,10 +29,14 @@ export const SignIn: FC = () => {
         setLoading(true);
         const response = await loginApp(phone, password);
         if (response.__typename !== 'ErrorResponse') {
+            const userResponseAPI = await getMe();
+            if (userResponseAPI.__typename !== 'ErrorResponse') {
+                store.saveUser(userResponseAPI.result);
+            }
             store.saveAuth(response.result);
             navigation.navigate("BookingStack");
+            setLoading(false);
         }
-        setLoading(false);
     }
     return (
         <CustomBackground>

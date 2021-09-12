@@ -1,27 +1,40 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import { StyleSheet } from 'react-native';
 import { TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { getMe } from '../../API';
 import { CustomBackground } from '../../components/CustomBackground';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { colors } from '../../contants/colors';
+import { User } from '../../types';
 
 export const EditAccount: FC = () => {
     const navigation = useNavigation<any>();
+    const [user, setUser] = useState<User>();
+    const [loading, setLoading] = useState(true);
+    const fetchMe = async () => {
+        const response = await getMe();
+        if (response.__typename !== 'ErrorResponse') {
+            setUser(response.result);
+        }
+        setLoading(false);
+    }
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
-            headerLeft: () => (
-                <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.navigate("Settings")}>
-                    <FastImage source={require('../../resources/images/back.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
-            )
-        })
+            headerLeft: () => <CustomHeaderLeft type="goback" onPress={() => navigation.navigate("Settings")} />
+        });
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchMe();
+        }, []),
+    );
 
     const renderVerticalField = (label: string, field?: string, value?: string) => {
         return (
@@ -32,6 +45,7 @@ export const EditAccount: FC = () => {
                         labelField: label,
                         infoField: field,
                         fieldValue: value,
+                        _id: user?._id //user id
                     })}
                     style={styles.info_field}>
                     <CustomText text={value} p1 style={{ color: colors.neutral1 }} />
@@ -54,14 +68,14 @@ export const EditAccount: FC = () => {
                     resizeMode="contain"
                 />
             </View>
-            {renderVerticalField('First name', 'first_name', 'Push')}
-            {renderVerticalField('Last name', 'last_name', 'Puttichai')}
-            {renderVerticalField('Phone number', 'phone_number', '9784 2348')}
-            {renderVerticalField('Email', 'email', 'pushputtichai789@gmail.com')}
+            {renderVerticalField('Full name', 'name', user?.name)}
+            {renderVerticalField('Phone number', 'phone', user?.phone)}
+            {renderVerticalField('Email', 'email', user?.email)}
             {renderVerticalField('Password', 'password', '*******')}
+            <LoadingOverlay loading={loading} />
         </CustomBackground>
     )
-}
+};
 const styles = StyleSheet.create({
     user_image: {
         marginVertical: 20,
@@ -77,3 +91,7 @@ const styles = StyleSheet.create({
         borderRadius: 12
     }
 })
+
+function fetchProfile() {
+    throw new Error('Function not implemented.');
+}

@@ -78,3 +78,31 @@ export interface ErrorResponse {
 export interface DefaulPayment {
     type: number; // 1: gody cash, 2: card
 }
+
+export interface Transport {
+    __typename: 'Transport';
+    profile: string;
+    images: string;
+    isVerified: boolean;
+    isActive: boolean;
+    _id: string;
+    brand: string;
+    vehicle: string;
+    registrationPlate: string;
+    color: string;
+    numberOfSeats: string;
+}
+export interface User {
+    __typename: 'User';
+    _id: string;
+    phone: string;
+    name: string;
+    isActive: boolean;
+    role: {
+        name: string;
+        code: string;
+    };
+    transport?: Transport;
+    email: string;
+    profileImage: string;
+}

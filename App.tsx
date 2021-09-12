@@ -11,6 +11,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StatusBar, View } from 'react-native';
+import { getMe } from './src/API';
 import { RootStack } from './src/routes/RootStack';
 import { AuthStore } from './src/store/authStore';
 import { StoreProvider } from './src/store/storeContext';
@@ -27,13 +28,17 @@ const App = () => {
   const loadStore = async () => {
     const token = await AsyncStorage.getItem('token');
     if (token) {
-      authStore.saveAuth({
-        token,
-        __typename: 'Auth',
-        expires_in: 360000,
-      })
+      const response = await getMe();
+      if (response.__typename !== 'ErrorResponse') {
+        authStore.saveUser(response.result);
+        authStore.saveAuth({
+          token,
+          __typename: 'Auth',
+          expires_in: 360000,
+        });
+        setLoading(false);
+      }
     }
-    setLoading(false);
   }
 
   if (loading) return <ActivityIndicator size="large" animating />;
