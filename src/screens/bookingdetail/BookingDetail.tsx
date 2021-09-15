@@ -14,6 +14,7 @@ interface Props {
     origin?: Location;
     destination?: Location;
     fare?: number;
+    onPress?: () => void;
 }
 export const BookingDetail: FC<Props> = (props) => {
     const { isOpenFullModal, origin, destination, fare } = props;
@@ -94,7 +95,8 @@ export const BookingDetail: FC<Props> = (props) => {
             </View>
             <CustomButton
                 type="primary"
-                title="Cancel booking"
+                title="Finish"
+                onPress={props.onPress}
             />
         </CustomBackground>
     )
