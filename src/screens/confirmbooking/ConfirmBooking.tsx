@@ -16,7 +16,7 @@ import { MapContainer } from '../mapcontainer/MapContainer';
 import { socket } from '../../socketIO';
 import { User } from '../../types';
 
-
+import LottieView from 'lottie-react-native';
 
 
 
@@ -63,15 +63,30 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
             }
         });
 
-        socket.on('driverConfirmBookingResponse', (res) => console.log('sss'));
-        // navigation.navigate("UpComingTrip")
-        onWatingDriverAccept();
+        // socket.on('driverConfirmBookingResponse', (res) => {
+        //     setShowModal(true);
+        //     bottomSheetModalRef.current?.close();
+        //     if (res) {
+        //         navigation.navigate("UpComingTrip")
+        //     }
+        // });
+        navigation.navigate("UpComingTrip")
+        // onWatingDriverAccept();
     }
 
-    const renderWatingModal = (status?: boolean, driver?: User) => {
+    const renderWatingModal = () => {
         return (
             <View style={styles.modal}>
-    
+                <CustomText t2 text="Looking for a ride ..." style={{ textAlign: 'center' }} />
+                <LottieView style={{
+                    width: constants.widthDevice - 200,
+                    height: constants.widthDevice - 200,
+                }} source={require('../../resources/images/waiting.json')} autoPlay loop />
+                <CustomButton type="primary" title="Cancel Booking" onPress={() => {
+                    setShowModal(false);
+                    bottomSheetModalRef.current?.snapTo(0);
+                }} />
+
             </View>
         )
     }
@@ -82,7 +97,7 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
                 <MapContainer />
             </View>
             {
-                showModal &&  renderWatingModal()
+                showModal && renderWatingModal()
             }
             <BottomSheet
                 ref={bottomSheetModalRef}
@@ -161,11 +176,13 @@ const styles = StyleSheet.create({
     },
     modal: {
         position: 'absolute',
-        width: constants.widthDevice - 40,
-        height: constants.widthDevice - 40,
-        top: (constants.heightDevice - (constants.widthDevice - 40)) / 2,
-        left: 20,
-        backgroundColor:colors.white,
-        borderRadius:5
+        width: constants.widthDevice - 80,
+        height: constants.widthDevice - 80,
+        top: (constants.heightDevice - (constants.widthDevice - 80)) / 2,
+        left: 40,
+        backgroundColor: colors.white,
+        borderRadius: 5,
+        padding: 20,
+        alignItems:'center'
     }
 });

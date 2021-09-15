@@ -36,9 +36,10 @@ const App = () => {
           __typename: 'Auth',
           expires_in: 360000,
         });
-        setLoading(false);
+
       }
     }
+    setLoading(false);
   }
 
   if (loading) return <ActivityIndicator size="large" animating />;
