@@ -15,35 +15,26 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../store/useStore';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { MapContainer } from '../mapcontainer/MapContainer';
-
+import { origin as mockOrigin } from '../../mockData';
 LogBox.ignoreLogs(['ReactNativeFiberHostComponent']);
 LogBox.ignoreLogs(['Mapbox warning Falling back']);
 // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-// MapboxGL.setAccessToken(constants.MapBoxKey);
-
 interface Props {
     navigation: any;
 }
 
-//TODO: set dummy origin location
-const originDummy = {
-    "location": {
-        "lat": 16.6131186,
-        "lng": 106.5982646
-    },
-    "description": "31 Lê Quý Đôn, An Hà, Lao Bảo, Hướng Hóa, Quảng Trị"
-}
+
 export const Home: FC<Props> = observer((props) => {
     const navigation = useNavigation<any>();
     const [keyword, setKeyword] = useState<string>();
-    const [origin, setOrigin] = useState<Location>(originDummy);
+    const [origin, setOrigin] = useState<Location>(mockOrigin);
     const [userLocation, setUserLocation] = useState<any>();
 
     const store = useStore();
     const { booking } = store;
     store.saveBooking({
         ...booking!,
-        origin: origin,
+        origin: mockOrigin,
         car_service: carServices[0] //godyX,
     })
     useEffect(() => {
@@ -74,7 +65,7 @@ export const Home: FC<Props> = observer((props) => {
                     //     location: detail.geometry.location,
                     //     description: data.description
                     // })}
-                    defaultValue={originDummy.description}
+                    defaultValue={mockOrigin.description}
                 />
                 <View >
                     <CustomTextFieldWithIcon
@@ -96,7 +87,7 @@ export const Home: FC<Props> = observer((props) => {
                         </View>
                         <View style={{ width: 117 }}>
                             <CustomButton
-                                onPress={() => navigation.navigate("Search", { origin: originDummy })}
+                                onPress={() => navigation.navigate("Search", { origin: mockOrigin })}
                                 title="Eats"
                                 type="light"
                                 leftIcon={require('../../resources/images/food.png')}

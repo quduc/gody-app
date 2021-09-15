@@ -59,6 +59,7 @@ export interface Booking {
     distance: any;
     duration: any;
     car_service: CarService;
+    nearByDrivers?: DriverLocation[];
 }
 
 export interface ObjectResponse<T> {
@@ -90,7 +91,8 @@ export interface Transport {
     vehicle: string;
     registrationPlate: string;
     color: string;
-    numberOfSeats: string;
+    numberOfSeats: number;
+    type: string;
 }
 export interface User {
     __typename: 'User';
@@ -105,4 +107,16 @@ export interface User {
     transport?: Transport;
     email: string;
     profileImage: string;
+    isVerified: boolean;
+}
+
+export interface DriverLocation {
+    __typename: 'UserLocation';
+    driver?: User;
+    location: {
+        coordinates: any,
+        type: string;
+    }
+    _id: string;
+
 }
