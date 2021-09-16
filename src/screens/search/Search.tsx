@@ -10,10 +10,11 @@ import { GooglePlacesInput } from '../../components/GooglePlacesInput';
 import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
+import { socket } from '../../socketIO';
 import { useStore } from '../../store/useStore';
-import { Location } from '../../types';
+import { DriverLocation, Location } from '../../types';
 import { calculateFare } from '../../utils/CalculateFare';
-
+import { destination as mockDestination } from '../../mockData';
 interface Props {
     // route: RouteProp<{ params: { origin: Location } }, 'params'>
 }
@@ -27,12 +28,12 @@ const destinationDummy = {
 export const Search: FC<Props> = observer((props) => {
     const navigation = useNavigation<any>();
     const store = useStore();
-    const [destination, setDestination] = useState<Location>(destinationDummy);
-
+    const [destination, setDestination] = useState<Location>(mockDestination);
     const [loading, setLoading] = useState<boolean>(false);
+    const [nearByDrivers, setNearByDrivers] = useState<DriverLocation[]>();
 
     store.saveBooking({
-        ...store.booking!, destination
+        ...store.booking!, destination : mockDestination
     })
     useEffect(() => {
         navigation.setOptions({
@@ -40,6 +41,7 @@ export const Search: FC<Props> = observer((props) => {
             headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
         })
     }, []);
+
 
     const onGoToChooseCar = async () => {
         setLoading(true);
@@ -64,6 +66,19 @@ export const Search: FC<Props> = observer((props) => {
         // }
 
 
+        //gửi yêu cầu lấy địa điểm của các tài xế gần nhất
+        socket.emit("getMap", {
+            "longitude": 105.7940398,
+            "latitude": 20.9808164
+        });
+
+        //lắng nghe 
+        socket.on("getMapResponse", (response: DriverLocation[]) => {
+            setNearByDrivers(response);
+            console.log({response});
+            
+        });
+
         //dummy 
         store.saveBooking({
             ...store.booking!,
@@ -75,7 +90,9 @@ export const Search: FC<Props> = observer((props) => {
                 value: 12000,
                 text: '12m',
             },
-            fare: 25
+            fare: 25,
+            nearByDrivers,
+
         })
         navigation.navigate("ChooseCar", {
             defaultFare: store.booking?.fare
@@ -100,7 +117,7 @@ export const Search: FC<Props> = observer((props) => {
                 <View style={{ width: 10 }} />
                 <View style={{ width: constants.widthDevice - 60 }}>
                     <GooglePlacesInput
-                        defaultValue={destination.description}
+                        defaultValue={mockDestination.description}
                     />
                 </View>
             </View>

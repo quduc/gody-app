@@ -3,7 +3,7 @@ import { CarService } from '../types';
 const constants: any = {
     widthDevice: Dimensions.get('window').width,
     heightDevice: Dimensions.get('window').height,
-    distanceMatrixKeyAPI: 'AIzaSyCxzPK44qRVpVMGXdHxKptTnBAyLQAA7uE',
+    distanceMatrixKeyAPI: 'AIzaSyC0lBsitLYwj0O_m7jcg_JYPEEQkrzD9_k',
     googlePlacesAutoCompleteKeyAPI: '',
     directionKeyAPI: 'AIzaSyDcGCyzR6Q5Ae6AL4udqQqqU7UAzOhIezQ',
 

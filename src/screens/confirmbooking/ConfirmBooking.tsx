@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { CustomButton } from '../../components/CustomButton';
 import { CustomCardPayment } from '../../components/CustomCardPayment';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
@@ -12,11 +11,12 @@ import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
 import { useStore } from '../../store/useStore';
-import MapViewDirections from 'react-native-maps-directions';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { MapContainer } from '../mapcontainer/MapContainer';
+import { socket } from '../../socketIO';
+import { User } from '../../types';
 
-
+import LottieView from 'lottie-react-native';
 
 
 
@@ -27,7 +27,7 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
     const navigation = useNavigation<any>();
     const bottomSheetModalRef = useRef<BottomSheet>(null);
     const snapPoints = useMemo(() => ['55%', '75%'], []);
-    // const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     useEffect(() => {
         navigation.setOptions({
@@ -35,12 +35,70 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
         })
     }, [])
 
+    const onWatingDriverAccept = () => {
+        setShowModal(true);
+        bottomSheetModalRef.current?.close();
+    }
+    const onRequestBooking = () => {
+        socket.emit('customerBooking', {
+            "startLocation": {
+                "name": "Học viện Kỹ thuật mật mã",
+                "longitude": 105.7940398,
+                "latitude": 20.9808164
+            },
+            "endLocation": {
+                "name": "Bến xe Mỹ Đình",
+                "longitude": 105.7762636,
+                "latitude": 21.0291669
+            },
+            "transport": {
+                "numberOfSeats": 4,
+                "type": "economy"
+            },
+            "distance": "2000",  //meters
+            "paymentOption": {
+                "paymentType": "card",
+                "paymentAmount": 25,
+                "cardId": "123123" // id thẻ nếu thanh toán bằng thẻ
+            }
+        });
+
+        // socket.on('driverConfirmBookingResponse', (res) => {
+        //     setShowModal(true);
+        //     bottomSheetModalRef.current?.close();
+        //     if (res) {
+        //         navigation.navigate("UpComingTrip")
+        //     }
+        // });
+        navigation.navigate("UpComingTrip")
+        // onWatingDriverAccept();
+    }
+
+    const renderWatingModal = () => {
+        return (
+            <View style={styles.modal}>
+                <CustomText t2 text="Looking for a ride ..." style={{ textAlign: 'center' }} />
+                <LottieView style={{
+                    width: constants.widthDevice - 200,
+                    height: constants.widthDevice - 200,
+                }} source={require('../../resources/images/waiting.json')} autoPlay loop />
+                <CustomButton type="primary" title="Cancel Booking" onPress={() => {
+                    setShowModal(false);
+                    bottomSheetModalRef.current?.snapTo(0);
+                }} />
+
+            </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
-            <View style={styles.map}>
+            <View style={showModal ? styles.mapFull : styles.map}>
                 <MapContainer />
             </View>
+            {
+                showModal && renderWatingModal()
+            }
             <BottomSheet
                 ref={bottomSheetModalRef}
                 index={0}
@@ -75,7 +133,7 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
                             onPress={() => navigation.navigate("ChoosePayment")}
                         />
                         <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
-                            <CustomButton type="primary" title={`Submit`} onPress={() => navigation.navigate("UpComingTrip")} />
+                            <CustomButton type="primary" title={`Submit`} onPress={onRequestBooking} />
                         </View>
 
                     </View>
@@ -91,6 +149,10 @@ const styles = StyleSheet.create({
     },
     map: {
         height: constants.heightDevice * 0.45,
+        width: constants.widthDevice,
+    },
+    mapFull: {
+        height: constants.heightDevice,
         width: constants.widthDevice,
     },
     bookingInfo: {
@@ -109,9 +171,18 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.20,
         shadowRadius: 1.41,
-
         elevation: 2,
-
         marginVertical: 10
+    },
+    modal: {
+        position: 'absolute',
+        width: constants.widthDevice - 80,
+        height: constants.widthDevice - 80,
+        top: (constants.heightDevice - (constants.widthDevice - 80)) / 2,
+        left: 40,
+        backgroundColor: colors.white,
+        borderRadius: 5,
+        padding: 20,
+        alignItems:'center'
     }
 });

@@ -47,7 +47,6 @@ export const ChooseCar: FC<Props> = observer(({ route: { params: { defaultFare }
         setService(carServiceID);
     }
     const confirmPickup = () => {
-        //TODO: find nearby driver before navigate
         navigation.navigate("ConfirmBooking");
     }
     const CarServiceItem = ({ carService }: any) => {
@@ -116,7 +115,11 @@ export const ChooseCar: FC<Props> = observer(({ route: { params: { defaultFare }
     return (
         <View style={styles.container}>
             <View style={styles.map}>
-                <MapContainer />
+                <MapContainer
+                    origin={booking?.origin!}
+                    destination={booking?.destination}
+                    nearByDrivers={booking?.nearByDrivers}
+                />
             </View>
             <BottomSheet
                 ref={bottomSheetModalRef}
