@@ -22,6 +22,8 @@ import { observer } from 'mobx-react';
 import { useStore } from '../store/useStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrivacySettings from '../screens/privacy-settings/PrivacySettings';
+import { Register } from '../screens/register/Register';
+
 const Drawer = createDrawerNavigator();
 interface Props { };
 
@@ -175,6 +177,13 @@ export const RootStack: FC<Props> = observer(() => {
                     options={{
                         headerTitle: "Verify Code",
                     }} />
+                <Drawer.Screen
+                    name="Register"
+                    component={Register}
+                    options={{
+                        headerTitle: "Register",
+                    }} />
+
                 <Drawer.Screen
                     name="BookingStack"
                     component={BookingStack}

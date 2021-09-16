@@ -34,19 +34,21 @@ export const SignIn: FC = () => {
                 store.saveUser(userResponseAPI.result);
             }
             store.saveAuth(response.result);
-            navigation.navigate("BookingStack");
+            setTimeout(() => {
+                setLoading(false);
+                navigation.navigate("BookingStack");
+            }, 1500);
             setLoading(false);
         }
     }
     return (
         <CustomBackground>
-            <CustomText text="Enter your account:" t2 style={{ color: colors.neutral2, marginVertical: 20 }} />
+            <CustomText text="Enter your phone number:" t2 style={{ color: colors.neutral2, marginVertical: 20 }} />
             <View style={styles.phone}>
                 <FastImage
                     style={{ width: 30, height: 24 }}
                     source={require('../../resources/images/vietnam_flag.png')}
                 />
-                <CustomText p1 text="+84" style={{ marginHorizontal: 10 }} />
                 <TextInput
                     value={phone}
                     onChangeText={(text) => setPhone(text)}
@@ -55,10 +57,12 @@ export const SignIn: FC = () => {
                         fontSize: 18,
                         borderLeftWidth: 1,
                         borderLeftColor: colors.neutral1,
-                        paddingHorizontal: 10
+                        paddingHorizontal: 10,
+                        marginLeft: 15
                     }}
                 />
             </View>
+            <CustomText text="Enter your password:" t2 style={{ color: colors.neutral2, marginVertical: 20 }} />
             <View style={styles.phone}>
                 <TextInput
                     value={password}
