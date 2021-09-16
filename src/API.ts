@@ -144,3 +144,39 @@ export const updateProfile = async (field: string, value: string, _id: string): 
         return handleServerError(error);
     }
 }
+
+
+export const sendOTP = async (phoneNumber: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`public/user/sendOTP`, {
+            phone: phoneNumber
+        });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+export const verifyOTP = async (phoneNumber: string, code: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`public/user/verifyOTP`, {
+            phone: phoneNumber,
+            code: code
+        });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+export const register = async (phoneNumber: string, password: string, name: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`public/user/register`, {
+            phone: phoneNumber,
+            password: password,
+            name: name,
+            roleCode: "driver"
+        });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}

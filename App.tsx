@@ -36,7 +36,6 @@ const App = () => {
           __typename: 'Auth',
           expires_in: 360000,
         });
-
       }
     }
     setLoading(false);
