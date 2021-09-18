@@ -3,26 +3,24 @@ import React, { FC, useEffect } from 'react';
 import {
    StyleSheet,
    View,
-   ScrollView,
    TouchableOpacity
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { color } from 'react-native-reanimated';
+import { AddPaymentMethod } from '../../components/AddPaymentMethod';
 import { CustomBackground } from '../../components/CustomBackground';
-import { CustomButton } from '../../components/CustomButton';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
-import constants from '../../contants/contants';
 
 interface IPayment { }
 const Payment: FC<IPayment> = () => {
    const navigation = useNavigation<any>();
-   // useEffect(() => {
-   //    navigation.setOptions({
-   //       headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("Settings")} />
-   //    })
-   // }, [])
+   useEffect(() => {
+      navigation.setOptions({
+          headerTransparent: false,
+          headerLeft: () => <CustomHeaderLeft type="openDrawer" onPress={() => navigation.openDrawer()} />
+      })
+  }, [])
    return (
       <CustomBackground>
          {/* add fund */}
@@ -43,12 +41,8 @@ const Payment: FC<IPayment> = () => {
                      <CustomText text={"Plan ahead."} s style={{ color: colors.neutral1 }} />
                      <CustomText text={"Get up to 5% off"} s style={{ color: colors.primary1 }} />
                   </View>
-
-                  <View style={styles.bottomBox}>
-                     <CustomText text={"Add funds"} p2 style={{ color: colors.neutral2 }} />
-                  </View>
+                  <AddPaymentMethod title="Add funds" onPress={() => navigation.navigate("AddFund")} />
                </View>
-
             </View>
          </TouchableOpacity>
 
@@ -74,11 +68,7 @@ const Payment: FC<IPayment> = () => {
                   />
                   <CustomText text={"Cash"} p2 />
                </View>
-
-               <View style={styles.bottomBox}>
-                  <CustomText text={"Add payment methods"} p2 style={{ color: colors.neutral2 }} />
-               </View>
-
+               <AddPaymentMethod title="Add payment methods" onPress={() => navigation.navigate("AddCard")} />
             </View>
 
          </TouchableOpacity>
@@ -94,10 +84,7 @@ const Payment: FC<IPayment> = () => {
                />
                <CustomText text={"PIN/gift code"} s style={{ color: colors.neutral1, marginTop: 10 }} />
 
-               <View style={styles.bottomBox}>
-                  <CustomText text={"Add promotion code"} p2 style={{ color: colors.neutral2 }} />
-               </View>
-
+               <AddPaymentMethod title="Add promotion code" onPress={() => navigation.navigate("AddPromotionCode", { screen: "Payment" })} />
             </View>
          </TouchableOpacity>
       </CustomBackground >

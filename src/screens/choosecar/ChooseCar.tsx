@@ -16,21 +16,19 @@ import { useStore } from '../../store/useStore';
 import { CarService, Location } from '../../types';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { MapContainer } from '../mapcontainer/MapContainer';
+import { AddPaymentMethod } from '../../components/AddPaymentMethod';
 
+interface Props { }
 
-interface Props {
-    route: RouteProp<{ params: { defaultFare: number } }, 'params'>
-}
-export const ChooseCar: FC<Props> = observer(({ route: { params: { defaultFare } } }) => {
+export const ChooseCar: FC<Props> = observer((props) => {
 
     const store = useStore();
     const { booking } = store;
+
     const [service, setService] = useState<number>(booking?.car_service.id ?? 1);
     const navigation = useNavigation<any>();
     const bottomSheetModalRef = useRef<BottomSheet>(null);
-    const snapPoints = useMemo(() => ['55%', '75%'], []);
-
-    // const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
+    const snapPoints = useMemo(() => ['50%', '100%'], []);
 
     useEffect(() => {
         navigation.setOptions({
@@ -42,11 +40,14 @@ export const ChooseCar: FC<Props> = observer(({ route: { params: { defaultFare }
         store.saveBooking({
             ...booking!,
             car_service: carServices[carServiceID - 1],
-            fare: carServiceID === 1 ? defaultFare : carServiceID === 2 ? defaultFare * 1.5 : defaultFare * 2
         })
         setService(carServiceID);
     }
     const confirmPickup = () => {
+        store.saveBooking({
+            ...booking!,
+            fare: booking?.car_service.id === 1 ? booking.defaultFare : booking?.car_service.id === 2 ? booking.defaultFare * 1.5 : booking?.defaultFare! * 2
+        })
         navigation.navigate("ConfirmBooking");
     }
     const CarServiceItem = ({ carService }: any) => {
@@ -77,9 +78,9 @@ export const ChooseCar: FC<Props> = observer(({ route: { params: { defaultFare }
                 </View>
                 <CustomText text={carService.description} s style={{ marginTop: 10, color: colors.neutral2, textAlign: 'center' }} />
                 <CustomText
-                    text={`${carService.type === 1 ? defaultFare
-                        : carService.type === 2 ? defaultFare * 1.5
-                            : defaultFare * 2
+                    text={`${carService.type === 1 ? booking?.defaultFare
+                        : carService.type === 2 ? booking?.defaultFare! * 1.5
+                            : booking?.defaultFare! * 2
                         }$`}
                     t1
                     style={{ marginTop: 15, color: colors.primary1, textAlign: 'center' }} />
@@ -98,12 +99,24 @@ export const ChooseCar: FC<Props> = observer(({ route: { params: { defaultFare }
                             )
                         })}
                     </ScrollView>
-                    <CustomCardPayment
-                        cardInfo="*** 9999"
-                        iconRight={require('../../resources/images/forward.png')}
-                        iconLeft={require('../../resources/images/visa.png')}
-                        onPress={() => navigation.navigate("ChoosePayment")}
-                    />
+                    {/* {booking?.paymentOption ? (
+                        <CustomCardPayment
+                            cardInfo={booking.paymentOption.cardInfo}
+                            iconRight={require('../../resources/images/forward.png')}
+                            iconLeft={booking.paymentOption.paymentType === "cash" ? require('../../resources/images/logo.png') : require('../../resources/images/visa.png')}
+                            onPress={() => navigation.navigate("ChoosePayment", {
+                                screen: "ChooseCar"
+                            })}
+                        />
+                    ) : (
+                        <AddPaymentMethod
+                            title="Choose payment method"
+                            onPress={() => navigation.navigate("ChoosePayment", {
+                                screen: "ChooseCar"
+                            })}
+                        />
+                    )} */}
+
                     <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
                         <CustomButton type="primary" title="Next" onPress={confirmPickup} />
                     </View>
@@ -143,7 +156,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     map: {
-        height: constants.heightDevice * 0.45,
+        height: constants.heightDevice * 0.55,
         width: constants.widthDevice,
     },
     search: {

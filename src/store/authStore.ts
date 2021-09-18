@@ -30,9 +30,12 @@ export class AuthStore {
         this.userLocation = userLocation;
     }
 
-
     @action
-    reset() {
+    resetBooking(){
+        this.booking = undefined;
+    }
+    @action
+    resetAll() {
         this.auth = undefined;
         this.userLocation = undefined;
         this.booking = undefined;

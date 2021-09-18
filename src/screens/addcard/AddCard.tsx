@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import {
    StyleSheet,
-   TouchableOpacity,
    View,
    TextInput,
 } from 'react-native';
@@ -19,6 +18,7 @@ import CountryPicker from 'react-native-country-picker-modal';
 import { CountryCode, Country } from './sourceData'
 
 import { rewriteVisa, rewriteDate } from '../../utils/CalculateFare';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 
 interface IAddCardProps { }
 
@@ -39,6 +39,12 @@ export const AddCard: FC<IAddCardProps> = () => {
    }
    const switchVisible = () => setVisible(!visible);
 
+   const navigation = useNavigation<any>();
+   useEffect(() => {
+      navigation.setOptions({
+         headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("Payment")} />
+      })
+   }, [])
    return (
       <CustomBackground>
 
@@ -105,7 +111,7 @@ export const AddCard: FC<IAddCardProps> = () => {
          </View>
 
          {/* country */}
-         <View style={{ borderRadius: 12, }}>
+         <View style={{ borderRadius: 12 }}>
             <CustomText text="Country:" t2 style={{ color: colors.neutral2 }} />
             <View style={styles.cardInfo1}>
                <CountryPicker
@@ -139,7 +145,7 @@ export const AddCard: FC<IAddCardProps> = () => {
 
          <View style={styles.btnContainer}>
             <CustomButton
-               title="Get a pass"
+               title="Save"
                type="primary"
             />
          </View>
@@ -177,11 +183,9 @@ const styles = StyleSheet.create({
    },
 
    btnContainer: {
-      width: constants.widthDevice / 2,
       height: 45,
       flex: 1,
-      justifyContent: 'flex-end',
-      marginBottom: 20,
+      marginTop: 20,
    },
    rowInfo2: {
       flexDirection: 'row',

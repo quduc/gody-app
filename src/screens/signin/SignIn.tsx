@@ -32,14 +32,12 @@ export const SignIn: FC = () => {
             const userResponseAPI = await getMe();
             if (userResponseAPI.__typename !== 'ErrorResponse') {
                 store.saveUser(userResponseAPI.result);
-            }
-            store.saveAuth(response.result);
-            setTimeout(() => {
-                setLoading(false);
+                store.saveAuth(response.result);
                 navigation.navigate("BookingStack");
-            }, 1500);
-            setLoading(false);
+            }
+
         }
+        setLoading(false);
     }
     return (
         <CustomBackground>

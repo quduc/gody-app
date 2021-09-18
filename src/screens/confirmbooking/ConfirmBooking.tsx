@@ -17,6 +17,7 @@ import { socket } from '../../socketIO';
 import { User } from '../../types';
 
 import LottieView from 'lottie-react-native';
+import { AddPaymentMethod } from '../../components/AddPaymentMethod';
 
 
 
@@ -31,7 +32,7 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
 
     useEffect(() => {
         navigation.setOptions({
-            headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
+            headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("ChooseCar")} />
         })
     }, [])
 
@@ -42,24 +43,26 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
     const onRequestBooking = () => {
         socket.emit('customerBooking', {
             "startLocation": {
-                "name": "Học viện Kỹ thuật mật mã",
-                "longitude": 105.7940398,
-                "latitude": 20.9808164
+                "name": booking?.origin.description,
+                "longitude": booking?.origin.location.lng,
+                "latitude": booking?.origin.location.lat,
             },
             "endLocation": {
-                "name": "Bến xe Mỹ Đình",
-                "longitude": 105.7762636,
-                "latitude": 21.0291669
+                "name": booking?.destination.description,
+                "longitude": booking?.destination.location.lng,
+                "latitude": booking?.destination.location.lat,
             },
             "transport": {
                 "numberOfSeats": 4,
-                "type": "economy"
+                "type": booking?.car_service.type === 1 ? 'economy' : (booking?.car_service.type === 2 ? 'primium' : 'luxury'),
             },
-            "distance": "2000",  //meters
+            "distance": booking?.distance,  //meters
+            "duration": booking?.duration,
             "paymentOption": {
-                "paymentType": "card",
-                "paymentAmount": 25,
-                "cardId": "123123" // id thẻ nếu thanh toán bằng thẻ
+                "paymentType": booking?.paymentOption?.paymentType,
+                "paymentAmount": booking?.promotionCode?.fee ? booking?.fare! - booking?.promotionCode?.fee! : booking?.fare,
+                "cardId": booking?.paymentOption?.cardId, // id thẻ nếu thanh toán bằng thẻ
+                "promotionCode": booking?.promotionCode
             }
         });
 
@@ -119,19 +122,36 @@ export const ConfirmBooking: FC<Props> = observer((props) => {
                         <View style={styles.bookingInfo}>
                             <View>
                                 <CustomText t2 text={booking?.car_service.name} style={{ color: colors.neutral1 }} />
-                                <CustomText p1 text="4:04pm drop-off" style={{ color: colors.neutral2 }} />
-                                <CustomText p1 text={booking?.car_service.description} style={{ color: colors.neutral2 }} />
+                                <CustomText p2 text="Seats:4" style={{ color: colors.neutral2 }} />
+                                <CustomText p2 text={booking?.car_service.description} style={{ color: colors.neutral2 }} />
                             </View>
                             <View>
-                                <CustomText t1 text={`${booking?.fare}$`} style={{ color: colors.primary1 }} />
+                                <CustomText s text={`${booking?.fare}$`} style={{ color: colors.neutral2, textAlign: 'right' }} />
+                                {booking?.promotionCode?.fee && <CustomText t2 text={`-${booking?.promotionCode?.fee}$`} style={{ color: colors.primary1, textAlign: 'right' }} />}
+                                {booking?.promotionCode?.fee
+                                    ? <CustomText t2 text={`= ${booking?.fare! - booking?.promotionCode?.fee!}$`} style={{ color: colors.primary2, textAlign: 'right', fontSize: 20, marginTop: 10 }} />
+                                    : <CustomText t2 text={`= ${booking?.fare}$`} style={{ color: colors.primary2, textAlign: 'right', fontSize: 20, marginTop: 10 }} />
+                                }
+
                             </View>
                         </View>
-                        <CustomCardPayment
-                            cardInfo="*** 9999"
-                            iconRight={require('../../resources/images/forward.png')}
-                            iconLeft={require('../../resources/images/visa.png')}
-                            onPress={() => navigation.navigate("ChoosePayment")}
-                        />
+                        {booking?.paymentOption ? (
+                            <CustomCardPayment
+                                cardInfo={booking.paymentOption.cardInfo}
+                                iconRight={require('../../resources/images/forward.png')}
+                                iconLeft={booking.paymentOption.paymentType === "cash" ? require('../../resources/images/logo.png') : require('../../resources/images/visa.png')}
+                                onPress={() => navigation.navigate("ChoosePayment", {
+                                    screen: "ConfirmBooking"
+                                })}
+                            />
+                        ) : (
+                            <AddPaymentMethod
+                                title="Choose payment method"
+                                onPress={() => navigation.navigate("ChoosePayment", {
+                                    screen: "ConfirmBooking"
+                                })}
+                            />
+                        )}
                         <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 10 }}>
                             <CustomButton type="primary" title={`Submit`} onPress={onRequestBooking} />
                         </View>
@@ -183,6 +203,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderRadius: 5,
         padding: 20,
-        alignItems:'center'
+        alignItems: 'center'
     }
 });

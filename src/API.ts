@@ -63,7 +63,7 @@ const handleServerError = (error: AxiosError): ErrorResponse => {
         if (response.data) {
             Alert.alert(
                 "",
-                response.data.error,
+                response.data.message,
                 [
                     {
                         text: "OK",

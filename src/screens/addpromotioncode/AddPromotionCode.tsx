@@ -1,72 +1,55 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useEffect, useState } from 'react';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View, TextInput, FlatList } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { CustomBackground } from '../../components/CustomBackground';
 import { CustomButton } from '../../components/CustomButton';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
-
-interface IPromotionCodeItem {
-   id: number;
-   promoteCode: string;
-   fee: number
-}
+import { useStore } from '../../store/useStore';
+import { IPromotionCodeItem } from '../../types';
 
 const promotionCode: IPromotionCodeItem[] = [
-   { "id": 1, "promoteCode": 'PROMOTE_1', fee: 10000 },
-   { "id": 2, "promoteCode": 'PROMOTE_2', fee: 20000 },
-   { "id": 3, "promoteCode": 'PROMOTE_3', fee: 15000 },
-   { "id": 4, "promoteCode": 'PROMOTE_4', fee: 12000 },
-   { "id": 5, "promoteCode": 'PROMOTE_5', fee: 16000 },
-   { "id": 6, "promoteCode": 'PROMOTE_6', fee: 16000 },
-   { "id": 7, "promoteCode": 'PROMOTE_7', fee: 16000 },
-   { "id": 8, "promoteCode": 'PROMOTE_8', fee: 16000 },
-   { "id": 9, "promoteCode": 'PROMOTE_9', fee: 16000 },
-   { "id": 10, "promoteCode": 'PROMOTE_10', fee: 16000 },
+   { "id": 1, "promoteCode": 'KMA15', fee: 1.5 },
+   { "id": 2, "promoteCode": 'KMA25', fee: 2.5 },
+   { "id": 3, "promoteCode": 'KMA50', fee: 5 },
+   { "id": 4, "promoteCode": 'KMA10', fee: 1 },
 ];
 
-export const AddPromotionCode: FC = () => {
-
-   const [code, setCode] = useState('');
-
+interface Props {
+   route: RouteProp<{ params: { screen?: string } }, 'params'>
+}
+export const AddPromotionCode: FC<Props> = observer(({ route: { params: { screen } } }) => {
+   const [code, setCode] = useState<IPromotionCodeItem>();
+   const store = useStore();
+   const { booking } = store;
    const navigation = useNavigation<any>();
    useEffect(() => {
       navigation.setOptions({
          headerTransparent: false,
+         headerLeft: () => <CustomHeaderLeft
+            type='goback'
+            onPress={() => navigation.navigate(screen)} />
       })
    }, []);
 
+   const onSubmit = () => {
+      if (booking?.destination) {
+         store.saveBooking({
+            ...booking!,
+            promotionCode: code
+         });
+         navigation.replace(screen);
+      } else {
+         navigation.navigate(screen);
 
-   // change and set the promotion code and call API to apply the fee
-   const selectCode = (item: IPromotionCodeItem) => {
-      setTimeout(() => {
-         setCode(item.promoteCode);
-      }, 500);
+      }
    }
-
-   const promoteItem: any = ({ item }: { item: IPromotionCodeItem }) => (
-      <TouchableOpacity style={styles.promoteCode}
-         onPress={() => selectCode(item)}
-      >
-         <View style={styles.iconContainer}>
-            <FastImage
-               style={{ width: 26, height: 26, marginRight: 20 }}
-               source={require('../../resources/images/godypass.png')}
-               resizeMode={FastImage.resizeMode.center}
-               tintColor={colors.primary1}
-            />
-         </View>
-         <View style={styles.feeContainer}>
-            {/* config and display the fee number */}
-            <CustomText text={item.promoteCode} t2 style={{ color: colors.neutral2 }} />
-            <CustomText text={`${item.fee}đ`} t2 style={styles.feeText} />
-         </View>
-      </TouchableOpacity>
-   )
 
    return (
       <CustomBackground>
@@ -83,23 +66,41 @@ export const AddPromotionCode: FC = () => {
             />
             <TextInput
                placeholder="PROMOTION CODE"
-               value={code}
+               value={code?.promoteCode}
                style={styles.inputCode}
             />
          </View>
 
          <View style={styles.listCodes}>
-            <FlatList<IPromotionCodeItem>
-               keyExtractor={(item: IPromotionCodeItem) => item.id.toString()}
-               data={promotionCode}
-               maxToRenderPerBatch={4}
-               renderItem={promoteItem}
-            />
+            {
+               promotionCode.map(code => {
+                  return (
+                     <TouchableOpacity key={code.id} style={styles.promoteCode}
+                        onPress={() => setCode(code)}
+                     >
+                        <View style={styles.iconContainer}>
+                           <FastImage
+                              style={{ width: 26, height: 26, marginRight: 20 }}
+                              source={require('../../resources/images/free.png')}
+                              resizeMode={FastImage.resizeMode.contain}
+                              tintColor={colors.primary1}
+                           />
+                        </View>
+                        <View style={styles.feeContainer}>
+                           {/* config and display the fee number */}
+                           <CustomText text={code.promoteCode} t2 style={{ color: colors.neutral2 }} />
+                           <CustomText text={`- ${code.fee}$`} t2 style={styles.feeText} />
+                        </View>
+                     </TouchableOpacity>
+                  )
+               })
+            }
          </View>
 
          <View style={styles.btnContainer}>
             <CustomButton
-               title="Get a pass"
+               onPress={onSubmit}
+               title="Submit"
                type="primary"
             />
          </View>
@@ -107,7 +108,7 @@ export const AddPromotionCode: FC = () => {
       </CustomBackground>
 
    )
-}
+});
 
 const styles = StyleSheet.create({
    iconContainer: {
@@ -151,11 +152,7 @@ const styles = StyleSheet.create({
       paddingLeft: 20,
    },
    btnContainer: {
-      width: constants.widthDevice / 2,
-      height: 45,
-      flex: 1,
-      justifyContent: 'flex-end',
-      marginBottom: 20,
+      marginTop: 20,
    },
    feeText: {
       color: colors.neutral1,

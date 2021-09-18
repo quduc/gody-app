@@ -23,6 +23,10 @@ import { useStore } from '../store/useStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrivacySettings from '../screens/privacy-settings/PrivacySettings';
 import { Register } from '../screens/register/Register';
+import Payment from '../screens/payment/Payment';
+import { AddFund } from '../screens/addfund/AddFund';
+import { AddCard } from '../screens/addcard/AddCard';
+import { AddPromotionCode } from '../screens/addpromotioncode/AddPromotionCode';
 
 const Drawer = createDrawerNavigator();
 interface Props { };
@@ -70,6 +74,13 @@ const drawerItems: DrawerItemProps[] = [
         "screen": "Settings",
         "icon": require('../resources/images/settings.png')
     },
+    {
+        "id": 7,
+        "name": "Sign Out",
+        "screen": "SignOut",
+        "icon": require('../resources/images/sign-out.png')
+    },
+
 ]
 export const RootStack: FC<Props> = observer(() => {
     const store = useStore();
@@ -88,11 +99,12 @@ export const RootStack: FC<Props> = observer(() => {
             return (
                 <TouchableOpacity
                     style={styles.drawerItem}
-                    onPress={() => props.navigation.navigate(item.screen)}
+                    onPress={item.screen !== 'SignOut' ? () => props.navigation.navigate(item.screen) : onLogout}
                 >
                     <FastImage
                         style={styles.icon}
                         source={item.icon}
+                        tintColor={colors.primary1}
                     />
                     <Text text={item.name} t2 style={{ marginLeft: 20 }} />
                 </TouchableOpacity>
@@ -116,18 +128,6 @@ export const RootStack: FC<Props> = observer(() => {
                 </TouchableOpacity>
                 <View style={{ height: constants.heightDevice - 220, paddingHorizontal: 20 }}>
                     {drawerItems.map((item: DrawerItemProps) => <DrawerItem key={item.id} item={item} />)}
-                </View>
-                <View style={styles.signOut}>
-                    <TouchableOpacity
-                        onPress={onLogout}
-                        style={styles.row}>
-                        <FastImage
-                            source={require('../resources/images/sign-out.png')}
-                            style={styles.icon}
-                            tintColor={colors.primary1}
-                        />
-                        <Text text="Sign Out" t2 style={{ marginLeft: 30 }} />
-                    </TouchableOpacity>
                 </View>
             </DrawerContentScrollView>
         )
@@ -225,6 +225,30 @@ export const RootStack: FC<Props> = observer(() => {
                     component={PrivacySettings}
                     options={{
                         headerTitle: "Privacy Settings",
+                    }} />
+                <Drawer.Screen
+                    name="Payment"
+                    component={Payment}
+                    options={{
+                        headerTitle: "Payment",
+                    }} />
+                <Drawer.Screen
+                    name="AddFund"
+                    component={AddFund}
+                    options={{
+                        headerTitle: "Add Fund",
+                    }} />
+                <Drawer.Screen
+                    name="AddCard"
+                    component={AddCard}
+                    options={{
+                        headerTitle: "Add Card",
+                    }} />
+                <Drawer.Screen
+                    name="AddPromotionCode"
+                    component={AddPromotionCode}
+                    options={{
+                        headerTitle: "Add Promotion code",
                     }} />
             </Drawer.Navigator>
         </NavigationContainer>

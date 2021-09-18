@@ -52,15 +52,6 @@ export interface Location {
     description: string;
 }
 
-export interface Booking {
-    origin: Location;
-    destination: Location;
-    fare: number;
-    distance: any;
-    duration: any;
-    car_service: CarService;
-    nearByDrivers?: DriverLocation[];
-}
 
 export interface ObjectResponse<T> {
     __typename: 'ObjectResponse';
@@ -76,8 +67,11 @@ export interface ErrorResponse {
 };
 
 //user default payment
-export interface DefaulPayment {
-    type: number; // 1: gody cash, 2: card
+export interface PaymentMethod {
+    id?: number;
+    type?: number; // 1: gody cash, 2: card
+    name?: string;
+    balance?: number
 }
 
 export interface Transport {
@@ -119,4 +113,29 @@ export interface DriverLocation {
     }
     _id: string;
 
+}
+
+export interface IPromotionCodeItem {
+    id: number;
+    promoteCode: string;
+    fee: number
+}
+
+export interface PaymentOption {
+    paymentType?: string;
+    paymentAmount?: number;
+    cardId?: string;
+    cardInfo?: string;
+}
+export interface Booking {
+    origin: Location;
+    destination: Location;
+    fare?: number;
+    distance: any;
+    duration: any;
+    car_service: CarService;
+    nearByDrivers?: DriverLocation[];
+    defaultFare: number;
+    promotionCode?: IPromotionCodeItem;
+    paymentOption?: PaymentOption
 }

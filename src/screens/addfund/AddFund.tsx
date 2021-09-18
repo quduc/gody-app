@@ -10,10 +10,9 @@ import {
 import FastImage from 'react-native-fast-image';
 
 import { CustomBackground } from '../../components/CustomBackground';
-import { CustomButton } from '../../components/CustomButton';
+import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import { colors } from '../../contants/colors';
-import constants from '../../contants/contants';
 
 interface IAddFundProps {
    currentBalance: number;
@@ -28,7 +27,12 @@ interface IAddFundProps {
 }
 
 export const AddFund: FC<IAddFundProps> = (props) => {
-
+   const navigation = useNavigation<any>();
+   useEffect(() => {
+      navigation.setOptions({
+         headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("Payment")} />
+      })
+   }, [])
    return (
       <CustomBackground>
          <View style={styles.title2}>

@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -18,6 +19,8 @@ interface Props {
 }
 export const BookingDetail: FC<Props> = (props) => {
     const { isOpenFullModal, origin, destination, fare } = props;
+    
+   
     return (
         <CustomBackground>
             {isOpenFullModal && <View style={{ height: 50 }} />}
@@ -100,7 +103,7 @@ export const BookingDetail: FC<Props> = (props) => {
             />
         </CustomBackground>
     )
-}
+};
 
 const styles = StyleSheet.create({
     driverInfo: {
