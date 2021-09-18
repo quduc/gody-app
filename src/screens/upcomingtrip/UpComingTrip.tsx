@@ -55,6 +55,7 @@ export const UpComingTrip: FC<Props> = observer(() => {
                     onFinishRating={(rate: number) => console.log({ rate })}
                 />
                 <CustomButton type="primary" title="Submit" onPress={() => {
+                    store.resetBooking();
                     navigation.dispatch(
                         CommonActions.reset({
                             index: 0,

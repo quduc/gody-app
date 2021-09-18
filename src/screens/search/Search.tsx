@@ -92,6 +92,7 @@ export const Search: FC<Props> = observer((props) => {
             },
             fare: 25,
             nearByDrivers,
+            defaultFare:25,
 
         })
         navigation.navigate("ChooseCar", {

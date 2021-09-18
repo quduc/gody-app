@@ -8,7 +8,6 @@ import { GooglePlacesInput } from '../../components/GooglePlacesInput';
 import { colors } from '../../contants/colors';
 import { CustomButton } from '../../components/CustomButton';
 import { Location } from '../../types';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import FastImage from 'react-native-fast-image';
 import Geolocation from '@react-native-community/geolocation';
 import { observer } from 'mobx-react';

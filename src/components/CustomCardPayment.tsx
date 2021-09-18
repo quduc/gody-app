@@ -10,7 +10,7 @@ interface Props {
     onPress?: () => void;
     iconRight?: any;
     iconLeft: any;
-    cardInfo: string;
+    cardInfo?: string;
 }
 export const CustomCardPayment: FC<Props> = (props) => {
     const { onPress, iconRight, iconLeft, cardInfo } = props;
