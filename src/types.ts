@@ -120,3 +120,36 @@ export interface DriverLocation {
     _id: string;
 
 }
+
+export interface ITripHistory {
+    __typename?: 'TripHistory';
+    _id: string;
+    price: number;
+    status: string;
+    distance?: number;
+    createdAt?: string;
+    startLocation: {
+        location: {
+            coordinates: any,
+            type: string;
+        },
+        name: string;
+    };
+    endLocation: {
+        location: {
+            coordinates: any,
+            type: string;
+        },
+        name: string;
+    };
+    driver?: {
+        name?: string;
+        phone?: string;
+        transport?: {
+            brand?:string;
+            vehicle?: string;
+            registrationPlate?: string;
+            type?: string;
+        }
+    };
+}

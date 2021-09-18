@@ -1,3 +1,4 @@
+import { RouteProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { FC } from 'react';
@@ -9,43 +10,29 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { MapContainer } from '../mapcontainer/MapContainer';
 import { CustomText } from '../../components/CustomText';
 import FastImage from 'react-native-fast-image';
+import { ITripHistory } from '../../types';
+import moment from 'moment';
+interface ITripDetails {
+   route: RouteProp<{ params: { item: ITripHistory } }, 'params'>
+}
+export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) => {
 
-import { HistoryTripItem } from '../yourtrip/YourTrips';
-
-// interface IProps {
-//    id: string;
-//    datetime: string;
-//    price: number;
-//    vehicle?: string;
-//    status?: string;
-
-//    locationFrom: string;
-//    locationTo: string;
-// }
-export const TripDetails: FC<HistoryTripItem> = (props) => {
-
-   // const navigation = useNavigation<any>();
+   const navigation = useNavigation<any>();
    const bottomSheetModalRef = useRef<BottomSheet>(null);
    const snapPoints = ['35%', '100%'];
    const snapPointsFinding = ['35%', '100%'];
    const [finding, setFinding] = useState<boolean>(true);
    const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
 
-   // useEffect(() => {
-   //    navigation.setOptions({
-   //       headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
-   //    })
-   // }, [])
+   useEffect(() => {
+      navigation.setOptions({
+         headerTransparent: false,
+         headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
+      })
+   }, [])
 
-
-   const {
-      id,
-      datetime = 'Today, 3:45pm',
-      price = '17000',
-      vehicle = 'Toyota Camry - 9HTR789',
-      status = 'Completed',
-      locationFrom = 'Apple Union Square',
-      locationTo = 'San Fancisco International Airport' } = props;
+   const { _id, price, status, distance, createdAt, driver, startLocation, endLocation } = item;
+   let time = moment(createdAt).format("dddd, Do YYYY");
 
    return (
       <View style={styles.container}>
@@ -65,29 +52,24 @@ export const TripDetails: FC<HistoryTripItem> = (props) => {
                <View style={styles.tripInfoContainer}>
                   {/* time + car info */}
                   <View style={{ flex: 2, }}>
-                     <CustomText text={datetime} p1 style={{ fontWeight: 'bold' }} />
-                     {vehicle && (
-                        <CustomText text={vehicle} p2 style={{ color: colors.neutral2, fontWeight: 'normal' }} />
-                     )}
+                     <CustomText text={time} p1 style={{ fontWeight: 'bold' }} />
+                     <CustomText text={driver?.phone} p2 style={{ color: colors.primary2, fontWeight: 'normal' }} />
+                     <CustomText text={`${driver?.transport?.brand}-${driver?.transport?.registrationPlate}`} p2 style={{ color: colors.neutral2, fontWeight: 'normal' }} />
+                     <CustomText text={`${driver?.transport?.type} trip`} s style={{ color: colors.primary1, fontWeight: 'normal' }} />
                   </View>
 
                   {/* price + status */}
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                     <CustomText text={price + ' đ'} p1 style={{ fontWeight: 'bold' }} />
-                     <CustomText text={status} p2 style={{
-                        color: status == 'Completed' ? colors.primary1 : 'red',
-
+                     <CustomText text={'$' + price} p1 style={{
+                        fontWeight: 'bold',
+                        fontSize: 18,
                      }} />
+                     <CustomText text={status == 'finished' ? 'Completed' : 'Canceled'} p2 style={{ color: status == 'finished' ? colors.primary1 : colors.neutral2 }} />
                   </View>
                </View>
 
                {/* location info */}
-               <View style={{
-                  height: 130,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 5
-               }}>
+               <View style={styles.locationInfor}>
                   {/* location icon */}
                   <View style={{
                      justifyContent: 'center',
@@ -104,13 +86,13 @@ export const TripDetails: FC<HistoryTripItem> = (props) => {
                   {/* location place */}
                   <View>
                      <TextInput
-                        value={locationFrom}
+                        value={startLocation.name}
                         editable={false}
                         style={styles.displayLocation}
                      />
 
                      <TextInput
-                        value={locationTo}
+                        value={endLocation.name}
                         editable={false}
                         style={styles.displayLocation}
                      />
@@ -127,15 +109,9 @@ export const TripDetails: FC<HistoryTripItem> = (props) => {
                      }} />
 
                   {/* switch payment method */}
-                  <TouchableOpacity style={{
-                     padding: 10,
-                     borderWidth: 1,
-                     borderColor: colors.neutral3,
-                     borderRadius: 12,
-                     marginVertical: 5,
-                  }}>
+                  <TouchableOpacity style={styles.switchPayment}>
                      <CustomText text={'Switch paymend method'} t2 style={{}} />
-                     <CustomText text={'I want to switch my payment method for this trip.'} t3 style={{ color: colors.neutral2, marginVertical: 5 }} />
+                     <CustomText text={'I want to switch my payment method for this trip.'} t3 style={{ color: colors.neutral2, marginVertical: 10 }} />
                      <CustomText text={'Edit payment'} t2 style={{
                         color: colors.primary1,
                         textDecorationLine: 'underline'
@@ -211,5 +187,19 @@ const styles = StyleSheet.create({
       width: constants.widthDevice - 80,
       height: 45,
       borderRadius: 12,
+   },
+   locationInfor: {
+      height: 130,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 5
+   },
+   switchPayment: {
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+      borderWidth: 1,
+      borderColor: colors.neutral3,
+      borderRadius: 12,
+      marginVertical: 5,
    }
 });
