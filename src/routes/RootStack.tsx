@@ -23,6 +23,8 @@ import { useStore } from '../store/useStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrivacySettings from '../screens/privacy-settings/PrivacySettings';
 import { Register } from '../screens/register/Register';
+import { TripsHistory } from '../screens/tripshistory/TripsHistory';
+import { TripDetails } from '../screens/tripdetails/TripDetails';
 import Payment from '../screens/payment/Payment';
 import { AddFund } from '../screens/addfund/AddFund';
 import { AddCard } from '../screens/addcard/AddCard';
@@ -43,6 +45,12 @@ const drawerItems: DrawerItemProps[] = [
         "name": "Payment",
         "screen": "Payment",
         "icon": require('../resources/images/payment.png')
+    },
+    {
+        "id": 7,
+        "name": "History",
+        "screen": "TripsHistory",
+        "icon": require('../resources/images/car.png')
     },
     {
         "id": 2,
@@ -226,7 +234,21 @@ export const RootStack: FC<Props> = observer(() => {
                     options={{
                         headerTitle: "Privacy Settings",
                     }} />
+
                 <Drawer.Screen
+                    name="TripsHistory"
+                    component={TripsHistory}
+                    options={{
+                        headerTitle: "Your History Trips",
+                    }} />
+
+                <Drawer.Screen
+                    name="TripDetails"
+                    component={TripDetails}
+                    options={{
+                        headerTitle: "Your Trip Details",
+                    }} />
+                < Drawer.Screen
                     name="Payment"
                     component={Payment}
                     options={{
