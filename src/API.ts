@@ -1,12 +1,13 @@
-import { 
-    GoogleDistanceResponse, 
-    BaseResponse, 
-    ErrorResponse, 
-    Auth, 
-    ObjectResponse, 
-    Booking, 
-    User, 
-    ITripHistory 
+import {
+    GoogleDistanceResponse,
+    BaseResponse,
+    ErrorResponse,
+    Auth,
+    ObjectResponse,
+    Booking,
+    User,
+    ITripHistory,
+    ListResponse
 } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
@@ -189,15 +190,15 @@ export const register = async (phoneNumber: string, password: string, name: stri
         return handleServerError(error);
     }
 }
-export const getManyTrips = async (): Promise<ObjectResponse<ITripHistory> | ErrorResponse> => {
+export const getManyTrips = async (): Promise<ListResponse<ITripHistory> | ErrorResponse> => {
     try {
-        const response = await get<ObjectResponse<ITripHistory>>(`private/trip`);
+        const response = await get<ListResponse<ITripHistory>>(`private/trip`);
         return response.data;
     } catch (error: any) {
         return handleServerError(error);
     }
 }
-export const getOneTrip = async (_id:string): Promise<ObjectResponse<ITripHistory> | ErrorResponse> => {
+export const getOneTrip = async (_id: string): Promise<ObjectResponse<ITripHistory> | ErrorResponse> => {
     try {
         const response = await get<ObjectResponse<ITripHistory>>(`private/trip/${_id}`);
         return response.data;

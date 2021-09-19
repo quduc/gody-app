@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { FC } from 'react';
-import { ActivityIndicator, StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
+import {  StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
@@ -20,18 +20,16 @@ export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) =
    const navigation = useNavigation<any>();
    const bottomSheetModalRef = useRef<BottomSheet>(null);
    const snapPoints = ['35%', '100%'];
-   const snapPointsFinding = ['35%', '100%'];
-   const [finding, setFinding] = useState<boolean>(true);
    const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
 
    useEffect(() => {
       navigation.setOptions({
          headerTransparent: false,
-         headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
+         headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.navigate("TripsHistory")} />
       })
    }, [])
 
-   const { _id, price, status, distance, createdAt, driver, startLocation, endLocation } = item;
+   const { _id, price, status, payment, createdAt, driver, startLocation, endLocation } = item;
    let time = moment(createdAt).format("dddd, Do YYYY");
 
    return (
@@ -60,7 +58,7 @@ export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) =
 
                   {/* price + status */}
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                     <CustomText text={'$' + price} p1 style={{
+                     <CustomText text={'$' + payment && payment?.amount} p1 style={{
                         fontWeight: 'bold',
                         fontSize: 18,
                      }} />

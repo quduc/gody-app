@@ -1,54 +1,43 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FC } from 'react';
 import {
-   ActivityIndicator,
-   ScrollView,
    StyleSheet,
    View,
    TouchableOpacity,
 } from 'react-native';
 
-import { useFocusEffect } from '@react-navigation/native';
-import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { CustomText } from '../../components/CustomText';
 import FastImage from 'react-native-fast-image';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
 import { getManyTrips } from '../../API';
-import { ITripHistory, ObjectResponse } from '../../types';
+import { ITripHistory } from '../../types';
 import moment from 'moment';
 import { CustomBackground } from '../../components/CustomBackground';
 
-// click to each trip and navigate to trip details
 export const TripsHistory: FC = () => {
    const navigation = useNavigation<any>();
    const [tripHistory, setTripHistory] = useState<ITripHistory[]>([]);
-   const [loading, setLoading] = useState<boolean>(false);
+   const [loading, setLoading] = useState<boolean>(true);
 
-   useFocusEffect(
-      React.useCallback(() => {
-         setLoading(true);
-         fetchManyTrips();
-         setLoading(false);
-
-         return () => {
-            setLoading(false);
-            setTripHistory([]);
-         };
-      }, [])
-   );
 
    const fetchManyTrips = async () => {
       const response = await getManyTrips();
       if (response.__typename !== 'ErrorResponse') {
-         setLoading(false);
-         setTripHistory(response?.result);
+         setTripHistory(response.result);
+         console.log(response.result);
+
       }
+      setLoading(false);
    };
 
+   useEffect(() => {
+      fetchManyTrips();
+   }, [])
    const TripInforItem = (item: ITripHistory) => {
-      const { _id, createdAt, price, driver, status, startLocation, endLocation } = item;
+      const { _id, createdAt, payment, driver, status, startLocation, endLocation } = item;
+
       let time = moment(createdAt).format("dddd, Do YYYY");
       return (
          <TouchableOpacity style={styles.tripInforContainer}
@@ -68,7 +57,7 @@ export const TripsHistory: FC = () => {
 
             {/* price + status */}
             < View style={styles.priceInfor} >
-               <CustomText text={'$' + price} p1 style={{
+               <CustomText text={'$' + payment && payment?.amount} p1 style={{
                   fontWeight: 'bold',
                   fontSize: 18,
                }} />
@@ -84,7 +73,7 @@ export const TripsHistory: FC = () => {
             <TripInforItem
                _id={item._id}
                createdAt={item.createdAt}
-               price={item.price}
+               payment={item.payment}
                driver={item.driver}
                status={item.status}
                startLocation={item.startLocation}
@@ -113,7 +102,7 @@ const styles = StyleSheet.create({
    },
    tripInforContainer: {
       flexDirection: 'row',
-      height: 70,
+      height: 100,
       width: constants.widthDevice - 40,
       justifyContent: 'space-between',
       alignItems: 'center',

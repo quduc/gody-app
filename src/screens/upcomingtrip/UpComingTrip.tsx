@@ -14,6 +14,7 @@ import { BookingDetail } from '../bookingdetail/BookingDetail';
 import { CustomButton } from '../../components/CustomButton';
 import FastImage from 'react-native-fast-image';
 import { CustomRatingBar } from '../../components/CustomRatingBar';
+import { socket } from '../../socketIO';
 
 
 interface Props { }
@@ -26,12 +27,23 @@ export const UpComingTrip: FC<Props> = observer(() => {
     const snapPoints = ['35%', '100%'];
     const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
+
+    const [driverToPickUp, setDriverToPickUp] = useState<boolean>(false);
+    const [driverToDropOff, setDriverToDropOff] = useState<boolean>(false);
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
         })
-    }, [])
+    }, []);
 
+    useEffect(() => {
+        socket.on("driverToPickUp", (res) => {
+            if (res) {
+                setDriverToPickUp(true);
+            }
+        })
+    }, [!driverToPickUp])
+   
     const onRatingDriver = () => {
         setShowModal(true);
         bottomSheetModalRef.current?.close();
@@ -83,6 +95,8 @@ export const UpComingTrip: FC<Props> = observer(() => {
                     paddingVertical: 20,
                 }}>
                     <BookingDetail
+                        driverToPickUp={driverToPickUp}
+                        driverToDropOff={driverToDropOff}
                         isOpenFullModal={isOpenFullModal}
                         origin={booking?.origin}
                         destination={booking?.destination}
