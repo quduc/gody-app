@@ -27,8 +27,15 @@ export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) =
    useEffect(() => {
       navigation.setOptions({
          headerTransparent: false,
-         headerLeft: () => <CustomHeaderLeft type='goback' onPress={() => navigation.goBack()} />
-      })
+         headerLeft: () => (
+            <TouchableOpacity activeOpacity={0.8} style={{ width: 24, height: 24 }} onPress={() => navigation.navigate("TripsHistory")}>
+               <FastImage
+                  source={require('../../resources/images/back.png')}
+                  style={{ width: 24, height: 24 }}
+               />
+            </TouchableOpacity>
+         )
+      });
    }, [])
 
    const { _id, price, status, distance, createdAt, driver, startLocation, endLocation } = item;

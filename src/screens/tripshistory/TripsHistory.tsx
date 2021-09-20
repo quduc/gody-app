@@ -62,8 +62,9 @@ export const TripsHistory: FC = () => {
             < View style={{ flex: 2, }}>
                <CustomText text={time} p1 style={{ fontWeight: 'bold' }} />
                <CustomText text={driver?.phone} p2 style={{ color: colors.primary2, fontWeight: 'normal' }} />
-               <CustomText text={`${driver?.transport?.brand}-${driver?.transport?.registrationPlate}`} p2 style={{ color: colors.neutral2, fontWeight: 'normal' }} />
-               <CustomText text={`${driver?.transport?.type} trip`} s style={{ color: colors.primary1, fontWeight: 'normal' }} />
+               {driver?.transport?.brand && (<CustomText text={`${driver?.transport?.brand}-${driver?.transport?.registrationPlate}`} p2 style={{ color: colors.neutral2, fontWeight: 'normal' }} />)}
+               {driver?.transport?.type && (<CustomText text={`${driver?.transport?.type} trip`} s style={{ color: colors.primary1, fontWeight: 'normal' }} />)}
+
             </View >
 
             {/* price + status */}
@@ -113,11 +114,12 @@ const styles = StyleSheet.create({
    },
    tripInforContainer: {
       flexDirection: 'row',
-      height: 70,
+      // height: 100,
       width: constants.widthDevice - 40,
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 20,
+      paddingVertical: 10,
       marginTop: 20,
       borderWidth: 1,
       borderColor: colors.primary1,

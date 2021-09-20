@@ -176,11 +176,12 @@ export const verifyOTP = async (phoneNumber: string, code: string): Promise<Base
         return handleServerError(error);
     }
 }
-export const register = async (phoneNumber: string, password: string, name: string): Promise<BaseResponse | ErrorResponse> => {
+export const register = async (phoneNumber: string, password: string, name: string, email: string): Promise<BaseResponse | ErrorResponse> => {
     try {
         const response = await post<BaseResponse>(`public/user/register`, {
             phone: phoneNumber,
             password: password,
+            email: email,
             name: name,
             roleCode: "driver"
         });

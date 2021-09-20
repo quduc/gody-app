@@ -23,6 +23,7 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
    const navigation = useNavigation<any>();
    const [firstName, setFirstName] = useState<string>('');
    const [lastName, setLastName] = useState<string>('');
+   const [email, setEmail] = useState<string>('');
    const [password, setPassword] = useState<string>('');
 
    const [error, setError] = useState<string>('');
@@ -54,7 +55,7 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
          setError('You need to fill in all the field above.')
          setLoading(false);
       } else {
-         const response = await register(phoneNumber, password, name);
+         const response = await register(phoneNumber, password, name, email);
          if (response.__typename !== 'ErrorResponse') {
             setTimeout(() => {
                setLoading(false);
@@ -97,7 +98,7 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
                value={firstName}
                onChangeText={(text) => {
                   setFirstName(text);
-                  if (firstName.length != 0 && lastName.length != 0 && password.length != 0) {
+                  if (firstName.length != 0 && lastName.length != 0 && password.length != 0 && email.length != 0) {
                      setError('');
                   }
                }}
@@ -113,11 +114,27 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
                value={lastName}
                onChangeText={(text) => {
                   setLastName(text);
-                  if (firstName.length != 0 && lastName.length != 0 && password.length != 0) {
+                  if (firstName.length != 0 && lastName.length != 0 && password.length != 0 && email.length != 0) {
                      setError('');
                   }
                }}
                placeholder={'Enter your last name'}
+               style={styles.inputBox}
+            />
+         </View>
+
+         {/* email */}
+         <View style={{ height: 80, marginTop: 20, }}>
+            <CustomText text={"Email"} t2 style={styles.inputLabel} />
+            <TextInput
+               value={lastName}
+               onChangeText={(text) => {
+                  setEmail(text);
+                  if (firstName.length != 0 && lastName.length != 0 && password.length != 0 && email.length != 0) {
+                     setError('');
+                  }
+               }}
+               placeholder={'Enter your email'}
                style={styles.inputBox}
             />
          </View>
@@ -129,7 +146,7 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
                value={password}
                onChangeText={(text) => {
                   setPassword(text);
-                  if (firstName.length != 0 && lastName.length != 0 && password.length != 0) {
+                  if (firstName.length != 0 && lastName.length != 0 && password.length != 0 && email.length != 0) {
                      setError('');
                   }
                }}

@@ -47,7 +47,7 @@ const drawerItems: DrawerItemProps[] = [
         "icon": require('../resources/images/payment.png')
     },
     {
-        "id": 7,
+        "id": 10,
         "name": "History",
         "screen": "TripsHistory",
         "icon": require('../resources/images/car.png')
