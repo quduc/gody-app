@@ -177,11 +177,12 @@ export const verifyOTP = async (phoneNumber: string, code: string): Promise<Base
         return handleServerError(error);
     }
 }
-export const register = async (phoneNumber: string, password: string, name: string): Promise<BaseResponse | ErrorResponse> => {
+export const register = async (phoneNumber: string, password: string, name: string, email: string): Promise<BaseResponse | ErrorResponse> => {
     try {
         const response = await post<BaseResponse>(`public/user/register`, {
             phone: phoneNumber,
             password: password,
+            email: email,
             name: name,
             roleCode: "driver"
         });
@@ -190,9 +191,9 @@ export const register = async (phoneNumber: string, password: string, name: stri
         return handleServerError(error);
     }
 }
-export const getManyTrips = async (): Promise<ListResponse<ITripHistory> | ErrorResponse> => {
+export const getManyTrips = async (status: string): Promise<ListResponse<ITripHistory> | ErrorResponse> => {
     try {
-        const response = await get<ListResponse<ITripHistory>>(`private/trip`);
+        const response = await get<ListResponse<ITripHistory>>(`private/trip?filter={"status":"${status}"}`);
         return response.data;
     } catch (error: any) {
         return handleServerError(error);

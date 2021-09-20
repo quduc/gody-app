@@ -17,10 +17,10 @@ const Payment: FC<IPayment> = () => {
    const navigation = useNavigation<any>();
    useEffect(() => {
       navigation.setOptions({
-          headerTransparent: false,
-          headerLeft: () => <CustomHeaderLeft type="openDrawer" onPress={() => navigation.openDrawer()} />
+         headerTransparent: false,
+         headerLeft: () => <CustomHeaderLeft type="openDrawer" onPress={() => navigation.openDrawer()} />
       })
-  }, [])
+   }, [])
    return (
       <CustomBackground>
          {/* add fund */}
@@ -36,7 +36,7 @@ const Payment: FC<IPayment> = () => {
                </View>
 
                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                  <CustomText text={"0 đ"} t1 style={{ color: colors.black }} />
+                  <CustomText text={"$ 0.0"} t1 style={{ color: colors.black }} />
                   <View style={{ flexDirection: 'row' }}>
                      <CustomText text={"Plan ahead."} s style={{ color: colors.neutral1 }} />
                      <CustomText text={"Get up to 5% off"} s style={{ color: colors.primary1 }} />
