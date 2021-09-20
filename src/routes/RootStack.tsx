@@ -1,7 +1,7 @@
 import { CommonActions, NavigationContainer } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View, Platform } from 'react-native';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import { CustomText as Text } from '../components/CustomText';
 import { colors } from '../contants/colors';
@@ -47,7 +47,7 @@ const drawerItems: DrawerItemProps[] = [
         "icon": require('../resources/images/payment.png')
     },
     {
-        "id": 10,
+        "id": 8,
         "name": "History",
         "screen": "TripsHistory",
         "icon": require('../resources/images/car.png')
@@ -119,7 +119,10 @@ export const RootStack: FC<Props> = observer(() => {
             )
         }
         return (
-            <DrawerContentScrollView {...props} style={{ backgroundColor: colors.neutral4, flex: 1 }}>
+            <DrawerContentScrollView {...props} style={{
+                backgroundColor: colors.neutral4,
+                flex: 1,
+            }}>
                 <TouchableOpacity
                     onPress={() => props.navigation.navigate("Settings")}
                     style={styles.userInfo}>
@@ -134,7 +137,10 @@ export const RootStack: FC<Props> = observer(() => {
                         />
                     </View>
                 </TouchableOpacity>
-                <View style={{ height: constants.heightDevice - 220, paddingHorizontal: 20 }}>
+                <View style={{
+                    height: Platform.OS === 'ios' ? constants.heightDevice - 220 : constants.heightDevice - 50,
+                    paddingHorizontal: 20,
+                }}>
                     {drawerItems.map((item: DrawerItemProps) => <DrawerItem key={item.id} item={item} />)}
                 </View>
             </DrawerContentScrollView>

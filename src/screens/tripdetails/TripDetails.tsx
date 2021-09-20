@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { FC } from 'react';
-import { ActivityIndicator, StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
@@ -20,8 +20,6 @@ export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) =
    const navigation = useNavigation<any>();
    const bottomSheetModalRef = useRef<BottomSheet>(null);
    const snapPoints = ['35%', '100%'];
-   const snapPointsFinding = ['35%', '100%'];
-   const [finding, setFinding] = useState<boolean>(true);
    const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
 
    useEffect(() => {
@@ -36,9 +34,9 @@ export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) =
             </TouchableOpacity>
          )
       });
-   }, [])
+   }, []);
 
-   const { _id, price, status, distance, createdAt, driver, startLocation, endLocation } = item;
+   const { _id, price, status, payment, createdAt, driver, startLocation, endLocation } = item;
    let time = moment(createdAt).format("dddd, Do YYYY");
 
    return (
@@ -59,19 +57,25 @@ export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) =
                <View style={styles.tripInfoContainer}>
                   {/* time + car info */}
                   <View style={{ flex: 2, }}>
-                     <CustomText text={time} p1 style={{ fontWeight: 'bold' }} />
-                     <CustomText text={driver?.phone} p2 style={{ color: colors.primary2, fontWeight: 'normal' }} />
-                     <CustomText text={`${driver?.transport?.brand}-${driver?.transport?.registrationPlate}`} p2 style={{ color: colors.neutral2, fontWeight: 'normal' }} />
-                     <CustomText text={`${driver?.transport?.type} trip`} s style={{ color: colors.primary1, fontWeight: 'normal' }} />
+                     < View style={{ flex: 3, }}>
+                        <CustomText text={time} p1 style={{ fontWeight: 'bold' }} />
+
+                        <CustomText text={driver?.name} p2 style={{ color: colors.neutral1, fontWeight: 'normal', fontSize: 18 }} />
+                        <CustomText text={driver?.phone} p2 style={{ color: colors.primary2, fontWeight: 'normal' }} />
+
+                        {driver?.transport?.brand && (<CustomText text={`${driver?.transport?.brand}-${driver?.transport?.registrationPlate}`} p2 style={{ color: colors.neutral2, fontWeight: 'normal' }} />)}
+                        {driver?.transport?.type && (<CustomText text={`${driver?.transport?.type} trip`} s style={{ color: colors.primary1, fontWeight: 'normal' }} />)}
+
+                     </View >
                   </View>
 
                   {/* price + status */}
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                     <CustomText text={'$' + price} p1 style={{
+                     <CustomText text={payment ? `$ ${payment?.amount}` : `$ 0.0`} p1 style={{
                         fontWeight: 'bold',
                         fontSize: 18,
                      }} />
-                     <CustomText text={status == 'finished' ? 'Completed' : 'Canceled'} p2 style={{ color: status == 'finished' ? colors.primary1 : colors.neutral2 }} />
+                     <CustomText text={status == 'finished' ? 'completed' : 'canceled'} p2 style={{ color: status == 'finished' ? colors.primary1 : colors.neutral2 }} />
                   </View>
                </View>
 

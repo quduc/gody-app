@@ -38,7 +38,7 @@ export const AddFund: FC<IAddFundProps> = (props) => {
          <View style={styles.title2}>
             <CustomText text="Current balance:" t2 style={{ color: colors.neutral2 }} />
 
-            <CustomText text={0 + ' đ'} t1 style={{ color: colors.neutral1 }} />
+            <CustomText text={`$ 0.0`} t1 style={{ color: colors.neutral1 }} />
          </View>
 
          <ScrollView style={{ flex: 1, marginTop: 10 }}>
@@ -81,11 +81,11 @@ const PriceListItem: FC<IPriceListItemProps> = ({ tripCost, tripCost_promotion, 
                <CustomText text="You'll pay:" p2 style={{ color: colors.black }} />
                {tripCost_promotion ? (
                   <>
-                     <CustomText text={tripCost + " đ"} t2 style={styles.promotionCost} />
-                     <CustomText text={tripCost_promotion + " đ"} t2 style={{ color: colors.primary1 }} />
+                     <CustomText text={`$ ${tripCost}`} t2 style={styles.promotionCost} />
+                     <CustomText text={`$ ${tripCost_promotion}`} t2 style={{ color: colors.primary1 }} />
                   </>
                ) : (
-                  <CustomText text={tripCost + " đ"} t2 style={{ color: colors.black, marginTop: 10 }} />
+                  <CustomText text={`$ ${tripCost}`} t2 style={{ color: colors.black, marginTop: 10 }} />
                )}
 
             </View>

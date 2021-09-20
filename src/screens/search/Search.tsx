@@ -33,7 +33,7 @@ export const Search: FC<Props> = observer((props) => {
     const [nearByDrivers, setNearByDrivers] = useState<DriverLocation[]>();
 
     store.saveBooking({
-        ...store.booking!, destination : mockDestination
+        ...store.booking!, destination: mockDestination
     })
     useEffect(() => {
         navigation.setOptions({
@@ -65,6 +65,15 @@ export const Search: FC<Props> = observer((props) => {
         //     )
         // }
 
+        //update vị trí người dùng *) origin
+        socket.emit("updateLocation", {
+            "longitude": 105.7940398,
+            "latitude": 20.9808164
+        });
+
+        socket.on("updateLocation", (response) => {
+            console.log(response);
+        });
 
         //gửi yêu cầu lấy địa điểm của các tài xế gần nhất
         socket.emit("getMap", {
@@ -73,10 +82,8 @@ export const Search: FC<Props> = observer((props) => {
         });
 
         //lắng nghe 
-        socket.on("getMapResponse", (response: DriverLocation[]) => {
+        socket.on("getMap", (response: DriverLocation[]) => {
             setNearByDrivers(response);
-            console.log({response});
-            
         });
 
         //dummy 
@@ -92,7 +99,7 @@ export const Search: FC<Props> = observer((props) => {
             },
             fare: 25,
             nearByDrivers,
-            defaultFare:25,
+            defaultFare: 25,
 
         })
         navigation.navigate("ChooseCar", {

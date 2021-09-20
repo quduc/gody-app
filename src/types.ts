@@ -114,11 +114,15 @@ export interface DriverLocation {
     _id: string;
 
 }
+export interface ListResponse<T> {
+    __typename: "ListResponse";
+    result: T[];
+};
 
 export interface ITripHistory {
     __typename?: 'TripHistory';
     _id: string;
-    price: number;
+    price?: number;
     status: string;
     distance?: number;
     createdAt?: string;
@@ -140,12 +144,15 @@ export interface ITripHistory {
         name?: string;
         phone?: string;
         transport?: {
-            brand?:string;
+            brand?: string;
             vehicle?: string;
             registrationPlate?: string;
             type?: string;
         }
     };
+    payment?: {
+        amount: number;
+    }
 }
 export interface IPromotionCodeItem {
     id: number;

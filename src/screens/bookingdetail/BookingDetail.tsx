@@ -16,18 +16,20 @@ interface Props {
     destination?: Location;
     fare?: number;
     onPress?: () => void;
+    driverToDropOff?: boolean;
+    driverToPickUp?: boolean;
 }
 export const BookingDetail: FC<Props> = (props) => {
-    const { isOpenFullModal, origin, destination, fare } = props;
-    
-   
+    const { isOpenFullModal, origin, destination, fare, driverToPickUp, driverToDropOff } = props;
+
+
     return (
         <CustomBackground>
             {isOpenFullModal && <View style={{ height: 50 }} />}
             <CustomText
                 t2
                 style={{ color: colors.neutral2 }}
-                text="Driver is comming ..."
+                text={driverToPickUp ? "Driver is comming ..." : "Driver has arrived!"}
             />
             <View style={styles.driverInfo}>
                 <View style={styles.row}>
