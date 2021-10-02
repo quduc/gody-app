@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -22,14 +22,13 @@ interface Props {
 export const BookingDetail: FC<Props> = (props) => {
     const { isOpenFullModal, origin, destination, fare, driverToPickUp, driverToDropOff } = props;
 
-
     return (
         <CustomBackground>
             {isOpenFullModal && <View style={{ height: 50 }} />}
             <CustomText
                 t2
                 style={{ color: colors.neutral2 }}
-                text={driverToPickUp ? "Driver is comming ..." : "Driver has arrived!"}
+                text={"Trips detail"}
             />
             <View style={styles.driverInfo}>
                 <View style={styles.row}>
@@ -58,7 +57,7 @@ export const BookingDetail: FC<Props> = (props) => {
                 </View>
                 <CustomText
                     t2
-                    text={`Nguyen Quang Duc - 5.0/5.0 Stars`}
+                    text={`Nguyen Dang Nam - 5.0/5.0 Stars`}
                     style={{ marginTop: 10 }}
                 />
                 <CustomText

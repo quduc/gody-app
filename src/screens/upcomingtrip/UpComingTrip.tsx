@@ -36,13 +36,13 @@ export const UpComingTrip: FC<Props> = observer(() => {
         })
     }, []);
 
-    useEffect(() => {
-        socket.on("driverToPickUp", (res) => {
-            if (res) {
-                setDriverToPickUp(true);
-            }
-        })
-    }, [!driverToPickUp])
+    // useEffect(() => {
+    //     socket.on("driverToPickUp", (res) => {
+    //         if (res) {
+    //             setDriverToPickUp(true);
+    //         }
+    //     })
+    // }, [!driverToPickUp])
    
     const onRatingDriver = () => {
         setShowModal(true);
@@ -83,7 +83,11 @@ export const UpComingTrip: FC<Props> = observer(() => {
     return (
         <View style={styles.container}>
             <View style={showModal ? styles.mapFull : styles.map}>
-                <MapContainer />
+                <MapContainer 
+                    origin={booking?.origin}
+                    destination={booking?.destination}
+                    nearByDrivers={booking?.nearByDrivers}
+                />
             </View>
             {showModal && renderWatingModal()}
             <BottomSheet

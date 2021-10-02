@@ -37,6 +37,7 @@ export const CustomButton: FC<Props> = (props) => {
                             {leftIcon && (<FastImage
                                 style={{ width: 20, height: 20, marginRight: 10 }}
                                 source={leftIcon}
+                                tintColor={colors.primary1}
                             />)}
                             <CustomText text={title} t2 />
                         </View>

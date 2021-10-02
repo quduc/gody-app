@@ -7,17 +7,17 @@ import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesInput } from '../../components/GooglePlacesInput';
 import { colors } from '../../contants/colors';
 import { CustomButton } from '../../components/CustomButton';
-import { Location } from '../../types';
+import { DriverLocation, Location } from '../../types';
 import FastImage from 'react-native-fast-image';
 import Geolocation from '@react-native-community/geolocation';
 import { observer } from 'mobx-react';
 import { useStore } from '../../store/useStore';
 import { CustomHeaderLeft } from '../../components/CustomHeaderLeft';
 import { MapContainer } from '../mapcontainer/MapContainer';
-import { origin as mockOrigin } from '../../mockData';
+import { origin as mockOrigin, nearByDrivers } from '../../mockData';
+import { socket } from '../../socketIO';
 LogBox.ignoreLogs(['ReactNativeFiberHostComponent']);
 LogBox.ignoreLogs(['Mapbox warning Falling back']);
-// LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 interface Props {
     navigation: any;
 }
@@ -28,13 +28,14 @@ export const Home: FC<Props> = observer((props) => {
     const [keyword, setKeyword] = useState<string>();
     const [origin, setOrigin] = useState<Location>(mockOrigin);
     const [userLocation, setUserLocation] = useState<any>();
-
+    const [drivers, setDrivers] = useState<DriverLocation[]>();
     const store = useStore();
     const { booking } = store;
     store.saveBooking({
         ...booking!,
         origin: mockOrigin,
-        car_service: carServices[0] //godyX,
+        car_service: carServices[0],//godyX,
+        nearByDrivers: nearByDrivers
     })
     useEffect(() => {
         navigation.setOptions({
@@ -49,6 +50,15 @@ export const Home: FC<Props> = observer((props) => {
         //     longitude: info.coords.longitude,
         //     latitude: info.coords.latitude
         // }));
+        //gửi yêu cầu lấy địa điểm của các tài xế gần nhất
+        socket.emit("getMap", {
+            "longitude": 105.7940398,
+            "latitude": 20.9808164
+        });
+        //lắng nghe 
+        socket.on("getMap", (response: DriverLocation[]) => {
+            setDrivers(response);
+        });
     }
 
     return (
@@ -56,6 +66,7 @@ export const Home: FC<Props> = observer((props) => {
             <View style={styles.map}>
                 <MapContainer
                     origin={origin}
+                    nearByDrivers={nearByDrivers}
                 />
             </View>
             <View style={styles.search}>

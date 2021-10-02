@@ -43,7 +43,7 @@ export const GodyPass: FC<Props> = (props) => {
                         />
                         <CustomText
                             text="Save up to 15% on all routes 
-                        when you ride with Gody and Pool in the San Francisco metropolitan  area."
+                        when you ride with Gody."
                             p2 style={{ color: colors.neutral1, fontSize: 12 }}
                         />
                     </View>
@@ -62,7 +62,7 @@ export const GodyPass: FC<Props> = (props) => {
                         />
                         <CustomText
                             text="Save up to 15% on all routes 
-                        when you ride with Gody and Pool in the San Francisco metropolitan  area."
+                        when order food using Gody eats"
                             p2 style={{ color: colors.neutral1, fontSize: 12 }}
                         />
                     </View>
@@ -80,21 +80,20 @@ export const GodyPass: FC<Props> = (props) => {
                             t2 style={{ color: colors.neutral1 }}
                         />
                         <CustomText
-                            text="Save up to 15% on all routes 
-                        when you ride with Gody and Pool in the San Francisco metropolitan  area."
+                            text="Save up to 35% on all routes."
                             p2 style={{ color: colors.neutral1, fontSize: 12 }}
                         />
                     </View>
                 </TouchableOpacity>
 
-                <CustomText
+                {/* <CustomText
                     text="Trip benefits coverage"
                     t2 style={{ color: colors.neutral1, marginVertical: 10 }}
                 />
                 <CustomText
                     text="Save up to 15% on all routes when you ride with Gody and Pool in the San Francisco metropolitan  area. Discounts may vary by trip."
                     p2 style={{ color: colors.neutral1 }}
-                />
+                /> */}
                 <View style={{ width: constants.widthDevice - 40, height: 48, marginTop: 20 }}>
                     <CustomButton
                         title="Get a pass"

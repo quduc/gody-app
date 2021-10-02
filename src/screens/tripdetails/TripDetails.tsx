@@ -12,6 +12,7 @@ import { CustomText } from '../../components/CustomText';
 import FastImage from 'react-native-fast-image';
 import { ITripHistory } from '../../types';
 import moment from 'moment';
+import { destination, origin } from '../../mockData';
 interface ITripDetails {
    route: RouteProp<{ params: { item: ITripHistory } }, 'params'>
 }
@@ -42,7 +43,10 @@ export const TripDetails: FC<ITripDetails> = ({ route: { params: { item } } }) =
    return (
       <View style={styles.container}>
          <View style={styles.map}>
-            <MapContainer />
+            <MapContainer 
+               origin={origin}
+               destination={destination}
+            />
          </View>
          <BottomSheet
             ref={bottomSheetModalRef}

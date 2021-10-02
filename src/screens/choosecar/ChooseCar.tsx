@@ -17,6 +17,7 @@ import { CarService, Location } from '../../types';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { MapContainer } from '../mapcontainer/MapContainer';
 import { AddPaymentMethod } from '../../components/AddPaymentMethod';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
 
 interface Props { }
 
@@ -29,6 +30,7 @@ export const ChooseCar: FC<Props> = observer((props) => {
     const navigation = useNavigation<any>();
     const bottomSheetModalRef = useRef<BottomSheet>(null);
     const snapPoints = useMemo(() => ['50%', '100%'], []);
+    const [loading,setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         navigation.setOptions({
@@ -44,11 +46,16 @@ export const ChooseCar: FC<Props> = observer((props) => {
         setService(carServiceID);
     }
     const confirmPickup = () => {
+        setLoading(true);
         store.saveBooking({
             ...booking!,
             fare: booking?.car_service.id === 1 ? booking.defaultFare : booking?.car_service.id === 2 ? booking.defaultFare * 1.5 : booking?.defaultFare! * 2
         })
-        navigation.navigate("ConfirmBooking");
+        setTimeout(() => {
+            setLoading(false);
+            navigation.navigate("ConfirmBooking");
+        }, 2000);
+        // navigation.navigate("ConfirmBooking");
     }
     const CarServiceItem = ({ carService }: any) => {
         return (
@@ -147,6 +154,7 @@ export const ChooseCar: FC<Props> = observer((props) => {
 
                 </BottomSheetScrollView>
             </BottomSheet>
+            <LoadingOverlay loading={loading}/>
         </View>
     )
 });

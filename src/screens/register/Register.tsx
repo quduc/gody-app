@@ -127,7 +127,7 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
          <View style={{ height: 80, marginTop: 20, }}>
             <CustomText text={"Email"} t2 style={styles.inputLabel} />
             <TextInput
-               value={lastName}
+               value={email}
                onChangeText={(text) => {
                   setEmail(text);
                   if (firstName.length != 0 && lastName.length != 0 && password.length != 0 && email.length != 0) {

@@ -193,7 +193,7 @@ export const register = async (phoneNumber: string, password: string, name: stri
 }
 export const getManyTrips = async (status: string): Promise<ListResponse<ITripHistory> | ErrorResponse> => {
     try {
-        const response = await get<ListResponse<ITripHistory>>(`private/trip?filter={"status":"${status}"}`);
+        const response = await get<ListResponse<ITripHistory>>(`private/trip?filter=[{"status":"${status}"}]`);
         return response.data;
     } catch (error: any) {
         return handleServerError(error);

@@ -52,24 +52,24 @@ const drawerItems: DrawerItemProps[] = [
         "screen": "TripsHistory",
         "icon": require('../resources/images/car.png')
     },
-    {
-        "id": 2,
-        "name": "Help",
-        "screen": "Help",
-        "icon": require('../resources/images/help.png')
-    },
+    // {
+    //     "id": 2,
+    //     "name": "Help",
+    //     "screen": "Help",
+    //     "icon": require('../resources/images/help.png')
+    // },
     {
         "id": 3,
         "name": "GODY Pass",
         "screen": "GodyPass",
         "icon": require('../resources/images/godypass.png')
     },
-    {
-        "id": 4,
-        "name": "Send a gift",
-        "screen": "SendAGift",
-        "icon": require('../resources/images/gift.png')
-    },
+    // {
+    //     "id": 4,
+    //     "name": "Send a gift",
+    //     "screen": "SendAGift",
+    //     "icon": require('../resources/images/gift.png')
+    // },
     {
         "id": 5,
         "name": "Free trips",

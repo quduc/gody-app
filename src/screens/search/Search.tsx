@@ -18,13 +18,7 @@ import { destination as mockDestination } from '../../mockData';
 interface Props {
     // route: RouteProp<{ params: { origin: Location } }, 'params'>
 }
-const destinationDummy = {
-    "location": {
-        "lat": 16.6328871,
-        "lng": 106.7383723
-    },
-    "description": "Green Hotel"
-}
+
 export const Search: FC<Props> = observer((props) => {
     const navigation = useNavigation<any>();
     const store = useStore();
@@ -32,9 +26,7 @@ export const Search: FC<Props> = observer((props) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [nearByDrivers, setNearByDrivers] = useState<DriverLocation[]>();
 
-    store.saveBooking({
-        ...store.booking!, destination: mockDestination
-    })
+
     useEffect(() => {
         navigation.setOptions({
             headerTransparent: false,
@@ -75,37 +67,29 @@ export const Search: FC<Props> = observer((props) => {
             console.log(response);
         });
 
-        //gửi yêu cầu lấy địa điểm của các tài xế gần nhất
-        socket.emit("getMap", {
-            "longitude": 105.7940398,
-            "latitude": 20.9808164
-        });
 
-        //lắng nghe 
-        socket.on("getMap", (response: DriverLocation[]) => {
-            setNearByDrivers(response);
-        });
-
-        //dummy 
         store.saveBooking({
             ...store.booking!,
+            destination: mockDestination,
             distance: {
-                value: 17.800,
-                text: '17kms'
+                value: 12.800,
+                text: '12.8kms'
             },
             duration: {
-                value: 12000,
-                text: '12m',
+                value: 1140,
+                text: '19ms',
             },
-            fare: 25,
+            fare: 24,
             nearByDrivers,
-            defaultFare: 25,
+            defaultFare: 24,
 
         })
-        navigation.navigate("ChooseCar", {
-            defaultFare: store.booking?.fare
-        });
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+            navigation.navigate("ChooseCar", {
+                defaultFare: store.booking?.fare
+            });
+        }, 2000);
     }
     return (
         <View style={styles.container} >
@@ -125,7 +109,11 @@ export const Search: FC<Props> = observer((props) => {
                 <View style={{ width: 10 }} />
                 <View style={{ width: constants.widthDevice - 60 }}>
                     <GooglePlacesInput
-                        defaultValue={mockDestination.description}
+
+                    onPress={(data, detail = null) => setDestination({
+                        location: detail.geometry.location,
+                        description: data.description
+                    })}
                     />
                 </View>
             </View>

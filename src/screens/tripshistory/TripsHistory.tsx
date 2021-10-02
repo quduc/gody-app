@@ -6,8 +6,7 @@ import {
    View,
    TouchableOpacity,
    FlatList,
-   ListRenderItem,
-   ListRenderItemInfo
+   ActivityIndicator,
 } from 'react-native';
 
 import { CustomText } from '../../components/CustomText';
@@ -17,7 +16,7 @@ import constants from '../../contants/contants';
 import { getManyTrips } from '../../API';
 import { ITripHistory } from '../../types';
 import moment from 'moment';
-import { CustomBackground } from '../../components/CustomBackground';
+
 
 export const TripsHistory: FC = () => {
    const navigation = useNavigation<any>();
@@ -47,8 +46,9 @@ export const TripsHistory: FC = () => {
 
    useEffect(() => {
       fetchManyTrips();
-      setLoading(false);
    }, []);
+
+
 
    const TripInforItem = (item: ITripHistory) => {
       const { _id, createdAt, payment, driver, status, startLocation, endLocation } = item;
@@ -85,7 +85,13 @@ export const TripsHistory: FC = () => {
          </TouchableOpacity >
       );
    }
-
+   if (loading) {
+      return (
+         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator animating size="large" color={colors.primary1} />
+         </View>
+      )
+   }
    return (
       <View style={styles.container}>
 
@@ -107,6 +113,7 @@ export const TripsHistory: FC = () => {
                   key={item._id}
                />
             )}
+            showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             ListEmptyComponent={() => (
                <View style={{ flex: 1 }}>
