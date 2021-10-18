@@ -46,19 +46,19 @@ export const Home: FC<Props> = observer((props) => {
 
 
     const getUserLocation = () => {
-        // Geolocation.getCurrentPosition(info => setUserLocation({
-        //     longitude: info.coords.longitude,
-        //     latitude: info.coords.latitude
-        // }));
-        //gửi yêu cầu lấy địa điểm của các tài xế gần nhất
-        socket.emit("getMap", {
-            "longitude": 105.7940398,
-            "latitude": 20.9808164
-        });
-        //lắng nghe 
-        socket.on("getMap", (response: DriverLocation[]) => {
-            setDrivers(response);
-        });
+        Geolocation.getCurrentPosition(info => setUserLocation({
+            longitude: info.coords.longitude,
+            latitude: info.coords.latitude
+        }));
+        //send request to get near by driver location
+        // socket.emit("getMap", {
+        //     "longitude": 105.7940398,
+        //     "latitude": 20.9808164
+        // });
+        // //listen response's server
+        // socket.on("getMap", (response: DriverLocation[]) => {
+        //     setDrivers(response);
+        // });
     }
 
     return (

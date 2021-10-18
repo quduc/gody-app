@@ -4,6 +4,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { colors } from '../../contants/colors';
 import constants from '../../contants/contants';
+import { locationTracking1, locationTracking2 } from '../../mockData';
 import { DriverLocation, Location } from '../../types';
 // import { destination, nearByDrivers, origin } from '../../mockData';
 
@@ -45,8 +46,8 @@ export const MapContainer: FC<Props> = (props) => {
     return (
         <MapView
             maxZoomLevel={20}
-            // zoomEnabled={false}
-            // scrollEnabled={false}
+            zoomEnabled={true}
+            scrollEnabled={true}
             provider={PROVIDER_GOOGLE}
             style={StyleSheet.absoluteFillObject}
             initialRegion={INITIAL_REGION}
@@ -88,6 +89,19 @@ export const MapContainer: FC<Props> = (props) => {
                 </Marker>
             ))
             }
+            <Marker
+                    key={2}
+                    coordinate={{ latitude: locationTracking1.location.lat, longitude: locationTracking1.location.lng }}
+                >
+                    <Image
+                        source={require('../../resources/images/car_map.png')}
+                        resizeMode="contain"
+                        style={{
+                            width: 30,
+                            height: 30,
+                        }}
+                    />
+                </Marker>
             {origin && destination && (
                 <MapViewDirections
                     origin={{

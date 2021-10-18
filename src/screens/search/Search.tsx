@@ -37,59 +37,63 @@ export const Search: FC<Props> = observer((props) => {
 
     const onGoToChooseCar = async () => {
         setLoading(true);
-        // const response = await getDistanceAndTime(store.booking?.origin, store.booking?.destination);
-        // if (response.status === 'OK') {
-        //     const totalFare = calculateFare(response.rows[0].elements[0].distance, response.rows[0].elements[0].duration);
-        //     store.saveBooking({
-        //         ...store.booking!,
-        //         distance: response.rows[0].elements[0].distance,
-        //         duration: response.rows[0].elements[0].duration,
-        //         fare: totalFare
-        //     })
-        //     navigation.navigate("ChooseCar");
-        // } else {
-        //     Alert.alert(
-        //         "",
-        //         `${response.error_message}`,
-        //         [
-        //             { text: "OK", onPress: () => console.log("OK Pressed") }
-        //         ]
-        //     )
-        // }
+        const response = await getDistanceAndTime(store.booking?.origin, store.booking?.destination);
+        if (response.__typename !== 'ErrorResponse') {
+            const totalFare = calculateFare(response.rows[0].elements[0].distance, response.rows[0].elements[0].duration);
 
-        //update vị trí người dùng *) origin
-        socket.emit("updateLocation", {
-            "longitude": 105.7940398,
-            "latitude": 20.9808164
-        });
+            store.saveBooking({
+                ...store.booking!,
+                distance: response.rows[0].elements[0].distance,
+                duration: response.rows[0].elements[0].duration,
+                fare: totalFare
+            })
 
-        socket.on("updateLocation", (response) => {
-            console.log(response);
-        });
-
-
-        store.saveBooking({
-            ...store.booking!,
-            destination: mockDestination,
-            distance: {
-                value: 12.800,
-                text: '12.8kms'
-            },
-            duration: {
-                value: 1140,
-                text: '19ms',
-            },
-            fare: 24,
-            nearByDrivers,
-            defaultFare: 24,
-
-        })
-        setTimeout(() => {
-            setLoading(false);
             navigation.navigate("ChooseCar", {
                 defaultFare: store.booking?.fare
             });
-        }, 2000);
+        } else {
+            Alert.alert(
+                "",
+                `${response.error}`,
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            )
+        }
+
+        //update vị trí người dùng *) origin
+        // socket.emit("updateLocation", {
+        //     "longitude": 105.7940398,
+        //     "latitude": 20.9808164
+        // });
+
+        // socket.on("updateLocation", (response) => {
+        //     console.log(response);
+        // });
+
+
+        // store.saveBooking({
+        //     ...store.booking!,
+        //     destination: mockDestination,
+        //     distance: {
+        //         value: 12.800,
+        //         text: '12.8kms'
+        //     },
+        //     duration: {
+        //         value: 1140,
+        //         text: '19ms',
+        //     },
+        //     fare: 24,
+        //     nearByDrivers,
+        //     defaultFare: 24,
+
+        // })
+        // setTimeout(() => {
+        //     setLoading(false);
+        //     navigation.navigate("ChooseCar", {
+        //         defaultFare: store.booking?.fare
+        //     });
+        // }, 2000);
     }
     return (
         <View style={styles.container} >
@@ -110,10 +114,10 @@ export const Search: FC<Props> = observer((props) => {
                 <View style={{ width: constants.widthDevice - 60 }}>
                     <GooglePlacesInput
 
-                    onPress={(data, detail = null) => setDestination({
-                        location: detail.geometry.location,
-                        description: data.description
-                    })}
+                        onPress={(data, detail = null) => setDestination({
+                            location: detail.geometry.location,
+                            description: data.description
+                        })}
                     />
                 </View>
             </View>

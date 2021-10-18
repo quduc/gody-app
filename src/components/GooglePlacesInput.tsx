@@ -45,7 +45,7 @@ export const GooglePlacesInput: FC<Props> = (props) => {
                     onPress={props.onPress}
                     enablePoweredByContainer={false}
                     query={{
-                        key: 'AIzaSyDFiUkkl5Uj-i3WDus4RLS_nf4M2TNDPwA',
+                        key: 'AIzaSyASkeupHzdx79vDHyE-uXmG_0-8i01OvEs',
                         language: 'vi',
                         components: 'country:vn',
 

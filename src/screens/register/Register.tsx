@@ -57,14 +57,11 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
       } else {
          const response = await register(phoneNumber, password, name, email);
          if (response.__typename !== 'ErrorResponse') {
-            setTimeout(() => {
-               setLoading(false);
-               Alert.alert(
-                  "",
-                  "Register successfully. Go to sign in now!",
-                  [{ text: "OK", onPress: () => navigation.navigate("SignIn") }]
-               );
-            }, 1500);
+            Alert.alert(
+               "",
+               "Register successfully. Go to sign in now!",
+               [{ text: "OK", onPress: () => navigation.navigate("SignIn") }]
+            );
          }
          setLoading(false);
       }
@@ -84,7 +81,8 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
                      flex: 2,
                      color: colors.neutral1,
                      fontSize: 18,
-                     paddingHorizontal: 10
+                     paddingHorizontal: 10,
+                     height: 48
                   }}
                />
                <CustomText text={"Verified"} t2 style={{ color: colors.primary1, marginRight: 10 }} />
@@ -110,6 +108,7 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
          {/* last name */}
          <View style={{ height: 80, marginTop: 20, }}>
             <CustomText text={"Last name"} t2 style={styles.inputLabel} />
+
             <TextInput
                value={lastName}
                onChangeText={(text) => {
@@ -178,7 +177,7 @@ export const Register: FC<IRegister> = ({ route: { params: { phoneNumber } } }) 
 }
 const styles = StyleSheet.create({
    inputLabel: {
-      color: colors.neutral2,
+      color: colors.neutral1,
       marginVertical: 10,
       marginLeft: 10
    },
@@ -192,15 +191,16 @@ const styles = StyleSheet.create({
    inputBox: {
       color: colors.neutral1,
       backgroundColor: colors.neutral4,
-      borderRadius: 12,
+      borderRadius: 5,
       fontSize: 18,
       width: '100%',
       paddingHorizontal: 20,
+      height: 48
    },
    phoneContainer: {
       flexDirection: 'row',
       backgroundColor: colors.neutral4,
-      borderRadius: 12,
+      borderRadius: 5,
       width: '100%',
       paddingHorizontal: 10,
       alignItems: 'center',

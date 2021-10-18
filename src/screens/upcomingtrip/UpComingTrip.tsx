@@ -15,7 +15,8 @@ import { CustomButton } from '../../components/CustomButton';
 import FastImage from 'react-native-fast-image';
 import { CustomRatingBar } from '../../components/CustomRatingBar';
 import { socket } from '../../socketIO';
-
+import Geolocation from '@react-native-community/geolocation';
+import { Location } from '../../types';
 
 interface Props { }
 export const UpComingTrip: FC<Props> = observer(() => {
@@ -27,7 +28,7 @@ export const UpComingTrip: FC<Props> = observer(() => {
     const snapPoints = ['35%', '100%'];
     const [isOpenFullModal, setIsOpenFullModal] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
-
+    const [userLocation, setUserLocation] = useState<any>();
     const [driverToPickUp, setDriverToPickUp] = useState<boolean>(false);
     const [driverToDropOff, setDriverToDropOff] = useState<boolean>(false);
     useEffect(() => {
@@ -43,7 +44,26 @@ export const UpComingTrip: FC<Props> = observer(() => {
     //         }
     //     })
     // }, [!driverToPickUp])
-   
+
+    useEffect(() => {
+        //update location every 10m
+        var handle = setInterval(updateUserLocation, 1000 * 60 * 10);
+
+        return () => {
+            clearInterval(handle);
+        }
+    });
+    const updateUserLocation = () => {
+        Geolocation.getCurrentPosition(info => setUserLocation({
+            longitude: info.coords.longitude,
+            latitude: info.coords.latitude
+        }));
+        //update location
+        store.saveBooking({
+            ...booking!,
+            origin: userLocation,
+        })
+    }
     const onRatingDriver = () => {
         setShowModal(true);
         bottomSheetModalRef.current?.close();
@@ -83,7 +103,7 @@ export const UpComingTrip: FC<Props> = observer(() => {
     return (
         <View style={styles.container}>
             <View style={showModal ? styles.mapFull : styles.map}>
-                <MapContainer 
+                <MapContainer
                     origin={booking?.origin}
                     destination={booking?.destination}
                     nearByDrivers={booking?.nearByDrivers}
